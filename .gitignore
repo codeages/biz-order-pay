@@ -1,4 +1,3 @@
-/migrations
 /app/cache
 /vendor
 /composer.lock
@@ -9,3 +8,4 @@
 .sonar/
 .idea/
 /var
+/bin
