@@ -1,5 +1,5 @@
 {
-    "name": "canuonifeng/biz-order-pay",
+    "name": "codeages/biz-order-pay",
     "description": "order, pay module",
     "type": "library",
     "require": {
@@ -21,6 +21,5 @@
     "require-dev": {
         "mockery/mockery": "^0.9.9",
         "phpunit/phpunit": "^4.8|^5.7|^6.0"
-    },
-    "bin": ["bin/biz"]
+    }
 }
