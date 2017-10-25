@@ -1,5 +1,5 @@
 {
-    "name": "codeages/order-pay",
+    "name": "codeages/biz-order-pay",
     "description": "order, pay module",
     "type": "library",
     "require": {
