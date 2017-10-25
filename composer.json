@@ -1,5 +1,5 @@
 {
-    "name": "codeages/biz-order-pay",
+    "name": "canuonifeng/biz-order-pay",
     "description": "order, pay module",
     "type": "library",
     "require": {
