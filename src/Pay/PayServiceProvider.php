@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Provider;
+namespace Codeages\Biz\Pay;
 
-use Codeages\Biz\Framework\Pay\Status\PayTradeContext;
+use Codeages\Biz\Pay\Status\PayTradeContext;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -11,7 +11,7 @@ class PayServiceProvider implements ServiceProviderInterface
     public function register(Container $biz)
     {
         $biz['migration.directories'][] = dirname(dirname(__DIR__)).'/migrations/pay';
-        $biz['autoload.aliases']['Pay'] = 'Codeages\Biz\Framework\Pay';
+        $biz['autoload.aliases']['Pay'] = 'Codeages\Biz\Pay';
 
         $biz['payment.options'] = null;
 
@@ -32,7 +32,7 @@ class PayServiceProvider implements ServiceProviderInterface
         };
 
         $biz['console.commands'][] = function () use ($biz) {
-            return new \Codeages\Biz\Framework\Pay\Command\TableCommand($biz);
+            return new \Codeages\Biz\Pay\Command\TableCommand($biz);
         };
 
         $this->registerStatus($biz);
@@ -43,7 +43,7 @@ class PayServiceProvider implements ServiceProviderInterface
     {
         $paymentDefaultPlatforms = array(
             'wechat' => array(
-                'class' => '\Codeages\Biz\Framework\Pay\Payment\WechatGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\WechatGetway',
                 'appid' => '',
                 'mch_id' => '',
                 'key' => '',
@@ -51,16 +51,16 @@ class PayServiceProvider implements ServiceProviderInterface
                 'key_path' => '',
             ),
             'alipay' => array(
-                'class' => '\Codeages\Biz\Framework\Pay\Payment\AlipayGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\AlipayGetway',
                 'seller_email' => '',
                 'partner' => '',
                 'key' => '',
             ),
             'iap' => array(
-                'class' => '\Codeages\Biz\Framework\Pay\Payment\IapGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\IapGetway',
             ),
             'lianlianpay' => array(
-                'class' => '\Codeages\Biz\Framework\Pay\Payment\LianlianPayGetway',
+                'class' => '\Codeages\Biz\Pay\Payment\LianlianPayGetway',
                 'secret' => '',
                 'oid_partner' => '',
             )
@@ -96,12 +96,12 @@ class PayServiceProvider implements ServiceProviderInterface
         };
 
         $statusArray = array(
-            '\Codeages\Biz\Framework\Pay\Status\ClosedStatus',
-            '\Codeages\Biz\Framework\Pay\Status\PayingStatus',
-            '\Codeages\Biz\Framework\Pay\Status\ClosingStatus',
-            '\Codeages\Biz\Framework\Pay\Status\PaidStatus',
-            '\Codeages\Biz\Framework\Pay\Status\RefundingStatus',
-            '\Codeages\Biz\Framework\Pay\Status\RefundedStatus',
+            '\Codeages\Biz\Pay\Status\ClosedStatus',
+            '\Codeages\Biz\Pay\Status\PayingStatus',
+            '\Codeages\Biz\Pay\Status\ClosingStatus',
+            '\Codeages\Biz\Pay\Status\PaidStatus',
+            '\Codeages\Biz\Pay\Status\RefundingStatus',
+            '\Codeages\Biz\Pay\Status\RefundedStatus',
         );
 
         foreach ($statusArray as $status) {

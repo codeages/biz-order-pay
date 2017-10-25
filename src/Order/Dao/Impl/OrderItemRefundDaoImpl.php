@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Dao\Impl;
+namespace Codeages\Biz\Order\Dao\Impl;
 
-use Codeages\Biz\Framework\Order\Dao\OrderItemRefundDao;
+use Codeages\Biz\Order\Dao\OrderItemRefundDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderItemRefundDaoImpl extends GeneralDaoImpl implements OrderItemRefundDao

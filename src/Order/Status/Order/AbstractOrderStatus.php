@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status\Order;
+namespace Codeages\Biz\Order\Status\Order;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -8,7 +8,7 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
-abstract class AbstractOrderStatus extends \Codeages\Biz\Framework\Order\Status\AbstractStatus
+abstract class AbstractOrderStatus extends \Codeages\Biz\Order\Status\AbstractStatus
 {
     protected $order;
 

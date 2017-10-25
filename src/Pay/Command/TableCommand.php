@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Command;
+namespace Codeages\Biz\Pay\Command;
 
 use Codeages\Biz\Framework\Context\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;

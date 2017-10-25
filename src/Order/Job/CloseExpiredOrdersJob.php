@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Job;
+namespace Codeages\Biz\Order\Job;
 
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 

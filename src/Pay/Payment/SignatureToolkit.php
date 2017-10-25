@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Payment;
+namespace Codeages\Biz\Pay\Payment;
 
 class SignatureToolkit
 {

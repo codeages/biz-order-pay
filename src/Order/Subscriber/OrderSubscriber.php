@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Subscriber;
+namespace Codeages\Biz\Order\Subscriber;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;

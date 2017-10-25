@@ -1,14 +1,14 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Service\Impl;
+namespace Codeages\Biz\Pay\Service\Impl;
 
-use Codeages\Biz\Framework\Pay\Status\PaidStatus;
-use Codeages\Biz\Framework\Pay\Status\PayingStatus;
-use Codeages\Biz\Framework\Pay\Status\RefundedStatus;
+use Codeages\Biz\Pay\Status\PaidStatus;
+use Codeages\Biz\Pay\Status\PayingStatus;
+use Codeages\Biz\Pay\Status\RefundedStatus;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\Framework\Pay\Service\PayService;
+use Codeages\Biz\Pay\Service\PayService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 

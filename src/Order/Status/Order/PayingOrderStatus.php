@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status\Order;
+namespace Codeages\Biz\Order\Status\Order;
 
 class PayingOrderStatus extends AbstractOrderStatus
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status\Refund;
+namespace Codeages\Biz\Order\Status\Refund;
 
 class RefundedStatus extends AbstractRefundStatus
 {

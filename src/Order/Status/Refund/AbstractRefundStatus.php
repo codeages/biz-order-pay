@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status\Refund;
+namespace Codeages\Biz\Order\Status\Refund;
 
-abstract class AbstractRefundStatus extends \Codeages\Biz\Framework\Order\Status\AbstractStatus
+abstract class AbstractRefundStatus extends \Codeages\Biz\Order\Status\AbstractStatus
 {
     protected $orderRefund;
 

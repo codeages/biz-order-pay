@@ -1,10 +1,10 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Service\Impl;
+namespace Codeages\Biz\Pay\Service\Impl;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\Framework\Util\RandomToolkit;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Pay\Util\RandomToolkit;
+use Codeages\Biz\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 

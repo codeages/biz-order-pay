@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Subscriber;
+namespace Codeages\Biz\Pay\Subscriber;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;

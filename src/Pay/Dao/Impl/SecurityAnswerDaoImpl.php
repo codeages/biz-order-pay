@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Dao\Impl;
+namespace Codeages\Biz\Pay\Dao\Impl;
 
-use Codeages\Biz\Framework\Pay\Dao\SecurityAnswerDao;
+use Codeages\Biz\Pay\Dao\SecurityAnswerDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class SecurityAnswerDaoImpl extends GeneralDaoImpl implements SecurityAnswerDao

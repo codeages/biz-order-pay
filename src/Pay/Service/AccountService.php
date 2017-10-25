@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Service;
+namespace Codeages\Biz\Pay\Service;
 
 interface AccountService
 {

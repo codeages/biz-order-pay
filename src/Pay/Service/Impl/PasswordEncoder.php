@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Service\Impl;
+namespace Codeages\Biz\Pay\Service\Impl;
 
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 

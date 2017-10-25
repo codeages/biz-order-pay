@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Dao\Impl;
+namespace Codeages\Biz\Pay\Dao\Impl;
 
-use Codeages\Biz\Framework\Pay\Dao\PayAccountDao;
+use Codeages\Biz\Pay\Dao\PayAccountDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class PayAccountDaoImpl extends GeneralDaoImpl implements PayAccountDao

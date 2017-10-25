@@ -1,9 +1,9 @@
 <?php
 
-namespace Codeages\Biz\Framework\Provider;
+namespace Codeages\Biz\Order;
 
-use Codeages\Biz\Framework\Order\Status\Order\OrderContext;
-use Codeages\Biz\Framework\Order\Status\Refund\OrderRefundContext;
+use Codeages\Biz\Order\Status\Order\OrderContext;
+use Codeages\Biz\Order\Status\Refund\OrderRefundContext;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -12,13 +12,13 @@ class OrderServiceProvider implements ServiceProviderInterface
     public function register(Container $biz)
     {
         $biz['migration.directories'][] = dirname(dirname(__DIR__)).'/migrations/order';
-        $biz['autoload.aliases']['Order'] = 'Codeages\Biz\Framework\Order';
+        $biz['autoload.aliases']['Order'] = 'Codeages\Biz\Order';
 
         $this->registerOrderStatus($biz);
         $this->registerOrderRefundStatus($biz);
 
         $biz['console.commands'][] = function () use ($biz) {
-            return new \Codeages\Biz\Framework\Order\Command\TableCommand($biz);
+            return new \Codeages\Biz\Order\Command\TableCommand($biz);
         };
 
     }
@@ -30,11 +30,11 @@ class OrderServiceProvider implements ServiceProviderInterface
         };
 
         $orderRefundStatusArray = array(
-            '\Codeages\Biz\Framework\Order\Status\Refund\RefundingStatus',
-            '\Codeages\Biz\Framework\Order\Status\Refund\AuditingStatus',
-            '\Codeages\Biz\Framework\Order\Status\Refund\RefusedStatus',
-            '\Codeages\Biz\Framework\Order\Status\Refund\RefundedStatus',
-            '\Codeages\Biz\Framework\Order\Status\Refund\CancelStatus',
+            '\Codeages\Biz\Order\Status\Refund\RefundingStatus',
+            '\Codeages\Biz\Order\Status\Refund\AuditingStatus',
+            '\Codeages\Biz\Order\Status\Refund\RefusedStatus',
+            '\Codeages\Biz\Order\Status\Refund\RefundedStatus',
+            '\Codeages\Biz\Order\Status\Refund\CancelStatus',
         );
 
         foreach ($orderRefundStatusArray as $orderRefundStatus) {
@@ -51,14 +51,14 @@ class OrderServiceProvider implements ServiceProviderInterface
         };
 
         $orderStatusArray = array(
-            '\Codeages\Biz\Framework\Order\Status\Order\CreatedOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\PayingOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\PaidOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\FailOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\ClosedOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\RefundingOrderStatus',
-            '\Codeages\Biz\Framework\Order\Status\Order\RefundedOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\CreatedOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\PayingOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\PaidOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\FailOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\SuccessOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\ClosedOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\RefundingOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\RefundedOrderStatus',
         );
 
         foreach ($orderStatusArray as $orderStatus) {

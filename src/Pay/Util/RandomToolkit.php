@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Util;
+namespace Codeages\Biz\Pay\Util;
 
 class RandomToolkit
 {

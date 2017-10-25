@@ -1,10 +1,10 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Dao\Impl;
+namespace Codeages\Biz\Order\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
-use Codeages\Biz\Framework\Order\Dao\OrderItemDeductDao;
+use Codeages\Biz\Order\Dao\OrderItemDeductDao;
 
 class OrderItemDeductDaoImpl extends GeneralDaoImpl implements OrderItemDeductDao
 {

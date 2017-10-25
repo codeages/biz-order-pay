@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use Codeages\Biz\Framework\Pay\Payment\IapGetway;
-use Codeages\Biz\Framework\Pay\Payment\WechatGetway;
+use Codeages\Biz\Pay\Payment\IapGetway;
+use Codeages\Biz\Pay\Payment\WechatGetway;
 
 class PayServiceTest extends IntegrationTestCase
 {

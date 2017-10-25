@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status\Order;
+namespace Codeages\Biz\Order\Status\Order;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 

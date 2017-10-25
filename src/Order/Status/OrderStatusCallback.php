@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status;
+namespace Codeages\Biz\Order\Status;
 
 interface OrderStatusCallback
 {

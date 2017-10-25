@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Service\Impl;
+namespace Codeages\Biz\Order\Service\Impl;
 
-use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 

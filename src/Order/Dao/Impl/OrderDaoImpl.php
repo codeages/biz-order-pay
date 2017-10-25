@@ -1,9 +1,9 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Dao\Impl;
+namespace Codeages\Biz\Order\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\DaoException;
-use Codeages\Biz\Framework\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Dao\OrderDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderDaoImpl extends GeneralDaoImpl implements OrderDao

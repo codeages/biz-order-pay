@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Codeages\Biz\Framework\Util\RandomToolkit;
+use Codeages\Biz\Pay\Util\RandomToolkit;
 
 class AccountServiceTest extends IntegrationTestCase
 {

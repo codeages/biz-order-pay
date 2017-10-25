@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Dao\Impl;
+namespace Codeages\Biz\Order\Dao\Impl;
 
-use Codeages\Biz\Framework\Order\Dao\OrderItemDao;
+use Codeages\Biz\Order\Dao\OrderItemDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao

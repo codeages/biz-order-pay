@@ -1,9 +1,9 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Status\Order;
+namespace Codeages\Biz\Order\Status\Order;
 
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Order\Status\OrderStatusCallback;
+use Codeages\Biz\Order\Status\OrderStatusCallback;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;

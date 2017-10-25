@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Status;
+namespace Codeages\Biz\Pay\Status;
 
 class ClosingStatus extends AbstractStatus
 {

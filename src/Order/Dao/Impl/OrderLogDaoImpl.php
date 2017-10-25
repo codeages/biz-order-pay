@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Dao\Impl;
+namespace Codeages\Biz\Order\Dao\Impl;
 
-use Codeages\Biz\Framework\Order\Dao\OrderLogDao;
+use Codeages\Biz\Order\Dao\OrderLogDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderLogDaoImpl extends GeneralDaoImpl implements OrderLogDao

@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Order\Service;
+namespace Codeages\Biz\Order\Service;
 
 interface WorkflowService
 {

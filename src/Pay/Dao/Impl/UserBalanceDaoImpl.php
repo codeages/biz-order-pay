@@ -1,8 +1,8 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Dao\Impl;
+namespace Codeages\Biz\Pay\Dao\Impl;
 
-use Codeages\Biz\Framework\Pay\Dao\UserBalanceDao;
+use Codeages\Biz\Pay\Dao\UserBalanceDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class UserBalanceDaoImpl extends GeneralDaoImpl implements UserBalanceDao
