@@ -110,6 +110,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $this->getOrderContext($refund['order_id'])->refunding($data);
 
         $order = $this->getOrderDao()->get($refund['order_id']);
+
         if (!empty($order['trade_sn'])) {
             $this->getPayService()->applyRefundByTradeSn($order['trade_sn'], $data);
         }
