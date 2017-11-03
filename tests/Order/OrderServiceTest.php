@@ -4,7 +4,9 @@ namespace Tests;
 
 
 use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Dao\OrderLogDao;
 use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Order\Service\WorkflowService;
 
 class OrderServiceTest extends IntegrationTestCase
 {
@@ -393,6 +395,33 @@ class OrderServiceTest extends IntegrationTestCase
         $this->assertEquals(168, $order['pay_amount']);
     }
 
+    public function testAdjustPrice()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($order['id'], 158);
+
+        $this->assertEquals(20, $adjustDeduct['deduct_amount']);
+        $this->assertArrayHasKey('order', $adjustDeduct);
+
+        $orderLogs = $this->getOrderLogDao()->search(array('status' => 'order.adjust_price'), array(), 0, 1);
+        $this->assertNotNull($orderLogs);
+    }
+
+    public function testAdjustPriceSecondTime()
+    {
+        $mockedOrderItems = $this->mockOrderItems();
+        $mockOrder = $this->mockOrder();
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
+
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($order['id'], 158);
+        $this->assertEquals(20, $adjustDeduct['deduct_amount']);
+
+        $adjustDeduct = $this->getWorkflowService()->adjustPrice($order['id'], 100);
+        $this->assertEquals(78, $adjustDeduct['deduct_amount']);
+    }
+
     protected function sumOrderItemPayAmount($item)
     {
         $priceAmount = $item['price_amount'];
@@ -450,6 +479,9 @@ class OrderServiceTest extends IntegrationTestCase
         return $this->biz->service('Order:OrderService');
     }
 
+    /**
+     * @return WorkflowService
+     */
     protected function getWorkflowService()
     {
         return $this->biz->service('Order:WorkflowService');
@@ -466,6 +498,14 @@ class OrderServiceTest extends IntegrationTestCase
     protected function getOrderdao()
     {
         return $this->biz->dao('Order:OrderDao');
+    }
+
+    /**
+     * @return OrderLogDao
+     */
+    protected function getOrderLogDao()
+    {
+        return $this->biz->dao('Order:OrderLogDao');
     }
 
 }
