@@ -6,6 +6,8 @@ use Codeages\Biz\Order\Dao\OrderDao;
 use Codeages\Biz\Order\Dao\OrderItemDao;
 use Codeages\Biz\Order\Dao\OrderItemDeductDao;
 use Codeages\Biz\Order\Dao\OrderRefundDao;
+use Codeages\Biz\Order\Dao\OrderLogDao;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -159,6 +161,55 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $this->getOrderRefundContext($id)->cancel();
     }
 
+    public function adjustPrice($orderId, $newPayAmount)
+    {
+        $order = $this->getOrderService()->getOrder($orderId);
+        $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($orderId);
+        list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
+        $adjustAmount = $order['price_amount'] - $newPayAmount - $totalDeductAmountExcludeAdjust;
+
+        if ($adjustAmount < 0) {
+            throw new InvalidArgumentException('order.adjust_price.over_limit');
+        }
+
+        if ($adjustDeduct) {
+            $newAdjustDeduct = $this->getOrderService()->updateOrderItemDeduct($adjustDeduct['id'], array(
+                'deduct_amount' => $adjustAmount,
+                'user_id' => $order['user_id'],
+            ));
+        } else {
+            $newAdjustDeduct = $this->getOrderService()->addOrderItemDeduct(array(
+                'order_id' => $order['id'],
+                'item_id' => 0,
+                'deduct_type' => 'adjust_price',
+                'deduct_id' => 0,
+                'deduct_amount' => $adjustAmount,
+                'user_id' => $order['user_id'],
+            ));
+        }
+
+        $this->addAdjustPriceLog($order, $newPayAmount, $adjustAmount);
+
+        $newOrder = $this->getOrderService()->getOrder($orderId);
+        $newAdjustDeduct['order'] = $newOrder;
+        return $newAdjustDeduct;
+    }
+
+    private function getTotalDeductExcludeAdjust($deducts)
+    {
+        $totalDeductAmountExcludeAdjust = 0;
+        $adjustDeduct = array();
+        foreach ($deducts as $deduct) {
+            if ($deduct['deduct_type'] == 'adjust_price') {
+                $adjustDeduct = $deduct;
+            } else {
+                $totalDeductAmountExcludeAdjust += $deduct['deduct_amount'];
+            }
+        }
+
+        return array($totalDeductAmountExcludeAdjust, $adjustDeduct);
+    }
+
     protected function getOrderRefundContext($id = 0)
     {
         $orderRefundContext = $this->biz['order_refund_context'];
@@ -204,6 +255,22 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     }
 
     /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
+    }
+
+    /**
+     * @return OrderLogDao
+     */
+    protected function getOrderLogDao()
+    {
+        return $this->biz->dao('Order:OrderLogDao');
+    }
+
+    /**
      * @return OrderRefundDao
      */
     protected function getOrderRefundDao()
@@ -233,5 +300,31 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     protected function getOrderDao()
     {
         return $this->biz->dao('Order:OrderDao');
+    }
+
+    /**
+     * @param $order
+     * @param $newPayAmount
+     * @param $adjustAmount
+     */
+    private function addAdjustPriceLog($order, $newPayAmount, $adjustAmount)
+    {
+        $logData = array(
+            'title' => $order['title'],
+            'orderId' => $order['id'],
+            'oldPrice' => $order['pay_amount'],
+            'newPrice' => $newPayAmount,
+            'adjust_amount' => $adjustAmount,
+        );
+
+        $orderLog = array(
+            'status' => 'order.adjust_price',
+            'order_id' => $order['id'],
+            'user_id' => $this->biz['user']['id'],
+            'deal_data' => $logData,
+            'ip' => empty($this->biz['user']['currentIp']) ? '' : $this->biz['user']['currentIp'],
+        );
+
+        $this->getOrderLogDao()->create($orderLog);
     }
 }
