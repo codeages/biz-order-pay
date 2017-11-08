@@ -12,9 +12,11 @@ interface WorkflowService
 
     public function paid($notifyData);
 
-    public function finish($orderId, $data = array());
+    public function success($orderId, $data = array());
 
     public function fail($orderId, $data = array());
+
+    public function finished($orderId, $data = array());
 
     public function applyOrderItemRefund($orderItemId, $data);
 

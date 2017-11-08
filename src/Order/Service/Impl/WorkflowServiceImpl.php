@@ -2,11 +2,16 @@
 
 namespace Codeages\Biz\Order\Service\Impl;
 
+use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Dao\OrderItemDao;
+use Codeages\Biz\Order\Dao\OrderItemDeductDao;
+use Codeages\Biz\Order\Dao\OrderRefundDao;
 use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Pay\Service\PayService;
 
 class WorkflowServiceImpl extends BaseService implements WorkflowService
 {
@@ -57,7 +62,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $this->getOrderContext($orderId)->closed($data);
     }
 
-    public function finish($orderId, $data = array())
+    public function success($orderId, $data = array())
     {
         return $this->getOrderContext($orderId)->success($data);
     }
@@ -65,6 +70,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function fail($orderId, $data = array())
     {
         return $this->getOrderContext($orderId)->fail($data);
+    }
+
+    public function finished($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->finished($data);
     }
 
     public function closeExpiredOrders()
@@ -78,6 +88,18 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
         foreach ($orders as $order) {
             $this->close($order['id']);
+        }
+    }
+
+    public function finishSuccessOrders()
+    {
+        $orders = $this->getOrderDao()->search(array(
+            'refund_time_LT' => time(),
+            'status' => 'success',
+        ), array('id' => 'DESC'), 0, 1000);
+
+        foreach ($orders as $order) {
+            $this->finished($order['id']);
         }
     }
 
@@ -173,26 +195,41 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $orderContext;
     }
 
+    /**
+     * @return PayService
+     */
     protected function getPayService()
     {
         return $this->biz->service('Pay:PayService');
     }
 
+    /**
+     * @return OrderRefundDao
+     */
     protected function getOrderRefundDao()
     {
         return $this->biz->dao('Order:OrderRefundDao');
     }
 
+    /**
+     * @return OrderItemDao
+     */
     protected function getOrderItemDao()
     {
         return $this->biz->dao('Order:OrderItemDao');
     }
 
+    /**
+     * @return OrderItemDeductDao
+     */
     protected function getOrderItemDeductDao()
     {
         return $this->biz->dao('Order:OrderItemDeductDao');
     }
 
+    /**
+     * @return OrderDao
+     */
     protected function getOrderDao()
     {
         return $this->biz->dao('Order:OrderDao');
