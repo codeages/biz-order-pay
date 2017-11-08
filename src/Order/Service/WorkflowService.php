@@ -34,5 +34,7 @@ interface WorkflowService
 
     public function closeExpiredOrders();
 
+    public function finishSuccessOrders();
+
     public function adjustPrice($orderId, $newPayAmount);
 }
