@@ -74,6 +74,7 @@ class OrderServiceProvider implements ServiceProviderInterface
             '\Codeages\Biz\Order\Status\Order\RefundingOrderStatus',
             '\Codeages\Biz\Order\Status\Order\RefundedOrderStatus',
             '\Codeages\Biz\Order\Status\Order\FinishedOrderStatus',
+            '\Codeages\Biz\Order\Status\Order\ShippingOrderStatus',
         );
 
         foreach ($orderStatusArray as $orderStatus) {

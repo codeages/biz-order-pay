@@ -146,6 +146,10 @@ class OrderContext
                 $this->getWorkflowService()->fail($order['id']);
             }
         }
+
+        if ($status == SuccessOrderStatus::NAME) {
+            $this->getWorkflowService()->shipping($order['id']);
+        }
     }
 
     protected function getProductCallback($orderItem)

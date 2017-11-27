@@ -44,4 +44,9 @@ class SuccessOrderStatus extends AbstractOrderStatus
     {
         return $this->getOrderStatus(FinishedOrderStatus::NAME)->process($data);
     }
+
+    public function shipping($data = array())
+    {
+        return $this->getOrderStatus(ShippingOrderStatus::NAME)->process($data);
+    }
 }

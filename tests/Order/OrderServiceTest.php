@@ -268,6 +268,7 @@ class OrderServiceTest extends IntegrationTestCase
                 'price_amount' => 100,
                 'target_id' => 1,
                 'target_type' => 'course',
+                'shipping_type' => 'virtual',
                 'create_extra' => array(
                     'xxx' => 'xxx'
                 ),
@@ -292,6 +293,7 @@ class OrderServiceTest extends IntegrationTestCase
                 'price_amount' => 110,
                 'target_id' => 2,
                 'target_type' => 'course',
+                'shipping_type' => 'express',
                 'create_extra' => array(
                     'xxx' => 'xxx'
                 ),
@@ -311,6 +313,24 @@ class OrderServiceTest extends IntegrationTestCase
                 )
             )
         );
+    }
+
+    public function testShipOrderWhenPaidStatus()
+    {
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $this->mockOrderItems());
+        $data = array(
+            'order_sn' => $order['sn'],
+            'pay_time' => time()
+        );
+
+        $order = $this->getWorkflowService()->paid($data);
+        $this->assertEquals('paid', $order['status']);
+
+        $order = $this->getWorkflowService()->finish($order['id']);
+        $this->assertEquals('success', $order['status']);
+
+        $order = $this->getWorkflowService()->shipping($order['id']);
+        $this->assertEquals('shipping', $order['status']);
     }
 
     /**
