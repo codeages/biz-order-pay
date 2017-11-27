@@ -147,7 +147,7 @@ class OrderContext
             }
         }
 
-        if ($status == SuccessOrderStatus::NAME) {
+        if ($status == SuccessOrderStatus::NAME && $status != ShippingOrderStatus::NAME) {
             $this->getWorkflowService()->shipping($order['id']);
         }
     }
