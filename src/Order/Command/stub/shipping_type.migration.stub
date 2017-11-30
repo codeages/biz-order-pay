@@ -1,0 +1,47 @@
+<?php
+
+use Phpmig\Migration\Migration;
+
+class BizShippingType extends Migration
+{
+    /**
+     * Do the migration
+     */
+    public function up()
+    {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+
+        if (!$this->isFieldExist('biz_order_item', 'shipping_type')) {
+          $connection->exec("ALTER TABLE `biz_order_item` ADD COLUMN `shipping_type` VARCHAR(32) NOT NULL DEFAULT 'virtual' COMMENT '商品类型（虚拟 virtual、实物 express）';");
+        }
+
+        if (!$this->isFieldExist('biz_order', 'shipping_type')) {
+          $connection->exec("ALTER TABLE `biz_order_item` ADD COLUMN `shipping_type` VARCHAR(32) NOT NULL DEFAULT 'virtual' COMMENT '商品类型（虚拟 virtual、实物 express）';");
+        }
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $biz = $this->getContainer();
+        $db = $biz['db'];
+
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $db->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    /**
+     * Undo the migration
+     */
+    public function down()
+    {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+        $connection->exec("
+          ALTER TABLE `biz_order_item` DROP COLUMN `shipping_type`;
+          ALTER TABLE `biz_order` DROP COLUMN `shipping_type`;
+        ");
+    }
+}
