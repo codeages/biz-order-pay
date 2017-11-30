@@ -17,7 +17,7 @@ class BizShippingType extends Migration
         }
 
         if (!$this->isFieldExist('biz_order', 'shipping_type')) {
-          $connection->exec("ALTER TABLE `biz_order_item` ADD COLUMN `shipping_type` VARCHAR(32) NOT NULL DEFAULT 'virtual' COMMENT '商品类型（虚拟 virtual、实物 express）';");
+          $connection->exec("ALTER TABLE `biz_order` ADD COLUMN `shipping_type` VARCHAR(32) NOT NULL DEFAULT 'virtual' COMMENT '商品类型（虚拟 virtual、实物 express）';");
         }
     }
 
