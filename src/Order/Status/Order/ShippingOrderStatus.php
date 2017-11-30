@@ -20,18 +20,18 @@ class ShippingOrderStatus extends AbstractOrderStatus
             }
 
             $method = 'make'.ucfirst($item['shipping_type']).'Order';
-            $order  = $this->$method();
+            $order  = $this->$method($data);
         }
 
         return $order;
     }
 
-    private function makeVirtualOrder()
+    private function makeVirtualOrder($data)
     {
-        return $this->getOrderDao()->get($this->order['id']);
+        return $this->success($data);
     }
 
-    private function makeExpressOrder()
+    private function makeExpressOrder($data)
     {
         return $this->changeStatus(self::NAME);
     }
@@ -41,13 +41,8 @@ class ShippingOrderStatus extends AbstractOrderStatus
         return $this->getOrderStatus(RefundingOrderStatus::NAME)->process($data);
     }
 
-    public function finished($data = array())
+    public function success($data = array())
     {
-        return $this->getOrderStatus(FinishedOrderStatus::NAME)->process($data);
+        return $this->getOrderStatus(SuccessOrderStatus::NAME)->process($data);
     }
-
-    public function shipping($data = array())
-    {
-        return $this->process($data);
-    }   
 }
