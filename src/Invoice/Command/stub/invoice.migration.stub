@@ -9,7 +9,7 @@ class BizInvoice extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE IF NOT EXIST `invoice`(
+            CREATE TABLE IF NOT EXISTS `invoice`(
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `title` varchar(255) NOT NULL DEFAULT '' COMMENT '抬头内容',
               `type` enum('person' , 'company') NOT NULL COMMENT '抬头类型',

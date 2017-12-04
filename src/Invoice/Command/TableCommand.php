@@ -14,16 +14,16 @@ class TableCommand extends AbstractCommand
         $this
             ->setName('invoice:table')
             ->setDescription('Create a migration for the invoice database table')
-            ->addArgument('directory', InputInterface::REQUIRED, 'Migration base directory.', null)
+            ->addArgument('directory', InputArgument::REQUIRED, 'Migration base directory.', null);
     }
 
-    protected function execute(InputInterface $input, OutputInterface)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $directory = $input->getArgument('directory');
 
         $migrations = array(
             'invoice',
-        ),
+        );
 
         foreach ($migrations as $migration) {
             $this->copyNextMigration($directory, $migration);
