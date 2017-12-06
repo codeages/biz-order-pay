@@ -2,7 +2,6 @@
 
 namespace Codeages\Biz\Pay\Payment;
 
-
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -64,7 +63,7 @@ class LianlianPayGetway extends AbstractGetway
         ));
 
         $setting = $this->getSetting();
-        if (!SignatureToolkit::signVerify($data, array('accessKey'=>$setting['accessKey']))) {
+        if (!$setting['signatureToolkit']->signVerify($data, array('accessKey'=>$setting['accessKey']))) {
             return array(
                 array(
                     'status' => 'failture',
@@ -108,7 +107,8 @@ class LianlianPayGetway extends AbstractGetway
 
     protected function signParams($params, $options)
     {
-        return SignatureToolkit::signParams($params, $options);
+        $setting = $this->getSetting();
+        return $setting['signatureToolkit']->signParams($params, $options);
     }
 
     protected function convertParams($params)
@@ -157,7 +157,7 @@ class LianlianPayGetway extends AbstractGetway
         unset($converted['userreq_ip'], $converted['bank_code'], $converted['pay_type'], $converted['timestamp'], $converted['version'], $converted['sign']);
         $converted['version'] = '1.2';
         $converted['app_request'] = 3;
-        $converted['sign'] = $this->signParams($converted);
+        $converted['sign'] = $this->signParams($converted, $this->getSetting());
         return array('req_data'=>json_encode($converted));
     }
 
@@ -183,6 +183,7 @@ class LianlianPayGetway extends AbstractGetway
             'secret' => $config['secret'],
             'accessKey' => $config['accessKey'],
             'oid_partner' => $config['oid_partner'],
+            'signatureToolkit' => $config['signatureToolkit'],
         );
     }
 }
