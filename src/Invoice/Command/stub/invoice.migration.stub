@@ -11,6 +11,7 @@ class BizInvoice extends Migration
         $connection->exec("
             CREATE TABLE IF NOT EXISTS `invoice`(
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+              `sn` varchar(64) NOT NULL COMMENT '申请开票号',
               `title` varchar(255) NOT NULL DEFAULT '' COMMENT '抬头内容',
               `type` enum('person' , 'company') NOT NULL COMMENT '抬头类型',
               `taxpayerIdentity` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
@@ -26,6 +27,7 @@ class BizInvoice extends Migration
               `orderIds` varchar(255) NOT NULL DEFAULT '' COMMENT '开票的订单ID',
               `status` enum('unchecked', 'invoicing', 'sent', 'cancelled') NOT NULL DEFAULT 'unchecked' COMMENT '申请状态',
               `money` bigint(16) NOT NULL DEFAULT 0 COMMENT '开票金额',
+              `reviewUserId` int(11) DEFAULT NULL COMMENT '审核人Id',
               `createdTime` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
               `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
               PRIMARY KEY (`id`)
