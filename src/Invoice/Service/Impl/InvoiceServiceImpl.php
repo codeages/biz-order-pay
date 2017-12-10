@@ -69,7 +69,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
 
     public function createInvoice($apply)
     {
-        if (!ArrayToolkit::requireds($apply, array('title', 'type', 'taxpayerIdentity', 'mailAddress', 'phone', 'email', 'receiver', 'money', 'orderIds', 'sn'))) {
+        if (!ArrayToolkit::requireds($apply, array('title', 'type', 'mailAddress', 'phone', 'email', 'receiver', 'money', 'orderIds', 'sn'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
