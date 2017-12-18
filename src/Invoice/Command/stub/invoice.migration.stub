@@ -9,49 +9,63 @@ class BizInvoice extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE IF NOT EXISTS `invoice`(
+            CREATE TABLE IF NOT EXISTS `biz_invoice`(
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `sn` varchar(64) NOT NULL COMMENT '申请开票号',
               `title` varchar(255) NOT NULL DEFAULT '' COMMENT '抬头内容',
               `type` enum('person' , 'company') NOT NULL COMMENT '抬头类型',
-              `taxpayerIdentity` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
+              `taxpayer_identity` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
               `content` varchar(100) NOT NULL DEFAULT '培训费' COMMENT '发票内容',
-              `address` varchar(255) NOT NULL DEFAULT '' COMMENT '地址、电话',
-              `bank` varchar(255) NOT NULL DEFAULT '' COMMENT '开户行和帐号',
               `comment` varchar(255) NOT NULL DEFAULT '' COMMENT '开票备注',
-              `mailAddress` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
+              `address` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
               `phone` varchar(255) NOT NULL DEFAULT '' COMMENT '联系电话',
               `email` varchar(255) NOT NULL DEFAULT '' COMMENT '电子邮箱',
               `receiver` varchar(100) NOT NULL DEFAULT '' COMMENT '收件人',
-              `userId` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
-              `orderIds` varchar(255) NOT NULL DEFAULT '' COMMENT '开票的订单ID',
-              `status` enum('unchecked', 'invoicing', 'sent', 'cancelled') NOT NULL DEFAULT 'unchecked' COMMENT '申请状态',
+              `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
+              `status` enum('unchecked', 'sent', 'cancelled') NOT NULL DEFAULT 'unchecked' COMMENT '申请状态',
               `money` bigint(16) NOT NULL DEFAULT 0 COMMENT '开票金额',
-              `reviewUserId` int(11) DEFAULT NULL COMMENT '审核人Id',
-              `createdTime` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
-              `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+              `review_user_id` int(11) DEFAULT 0 COMMENT '审核人Id',
+              `number` varchar(64) DEFAULT '' COMMENT '发票号',
+              `post_number` varchar(64) DEFAULT '' COMMENT '邮寄号',
+              `review_comment` varchar(255) DEFAULT '' COMMENT '审核备注',
+              `created_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+              `updated_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-            CREATE TABLE IF NOT EXISTS `invoice_template`(
+            CREATE TABLE IF NOT EXISTS `biz_invoice_template`(
               `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
               `title` varchar(255) NOT NULL DEFAULT '' COMMENT '抬头内容',
               `type` enum('person' , 'company') NOT NULL COMMENT '抬头类型',
-              `taxpayerIdentity` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
+              `taxpayer_identity` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
               `content` varchar(100) NOT NULL DEFAULT '培训费' COMMENT '发票内容',
-              `address` varchar(255) NOT NULL DEFAULT '' COMMENT '地址、电话',
-              `bank` varchar(255) NOT NULL DEFAULT '' COMMENT '开户行和帐号',
               `comment` varchar(255) NOT NULL DEFAULT '' COMMENT '开票备注',
               `email` varchar(255) NOT NULL DEFAULT '' COMMENT '电子邮箱',
-              `mailAddress` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
+              `address` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
               `phone` varchar(255) NOT NULL DEFAULT '' COMMENT '联系电话',
               `receiver` varchar(100) NOT NULL DEFAULT '' COMMENT '收件人',
-              `userId` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
-              `createdTime` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
-              `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
-              `isDefault` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否默认',
+              `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
+              `created_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+              `updated_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+              `is_default` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否默认',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
         ");
+
+        $connection->exec("
+          ALTER TABLE `biz_order` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn' "
+        );
+    }
+
+    public function down()
+    {
+        $biz = $this->getContainer();
+        $connection = $biz['db'];
+
+        $connection->exec('DROP TABLE `biz_invoice`;');
+
+        $connection->exec('DROP TABLE `biz_invoice_template`;');
+
+        $connection->exec('ALTER TABLE `biz_order` DROP COLUMN `invoice_sn`;');
     }
 }

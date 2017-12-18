@@ -12,11 +12,14 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
     {
         $this->validateInvoiceTemplateFields($invoice);
 
+        $invoice['comment'] = $this->purifyHtml($invoice['comment'], true);
+
         $user = $this->biz['user'];
         $template = $this->getDefaultTemplate($user['id']);
         if (empty($template)) {
-            $invoice['isDefault'] = 1;
+            $invoice['is_default'] = 1;
         }
+
         $invoice = $this->filterFields($invoice);
 
         return $this->getInvoiceTemplateDao()->create($invoice);
@@ -54,11 +57,11 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
     {
         $template = $this->getDefaultTemplate($userId);
         if ($template) {
-            $template['isDefault'] = '0';
+            $template['is_default'] = '0';
             $this->updateInvoiceTemplate($template['id'], $template);
         }
         $template = $this->getInvoiceTemplate($id);
-        $template['isDefault'] = '1';
+        $template['is_default'] = '1';
 
         return $this->updateInvoiceTemplate($id, $template);
     }
@@ -74,8 +77,8 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
             array(
                 'title',
                 'type',
-                'taxpayerIdentity',
-                'mailAddress',
+                'taxpayer_identity',
+                'address',
                 'phone',
                 'email',
                 'receiver',
@@ -92,19 +95,24 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
             array(
                 'title',
                 'type',
-                'taxpayerIdentity',
+                'taxpayer_identity',
                 'content',
                 'address',
-                'bank',
-                'mailAddress',
                 'phone',
                 'email',
                 'receiver',
                 'comment',
-                'userId',
-                'isDefault',
+                'user_id',
+                'is_default',
             )
         );
+    }
+
+    protected function purifyHtml($html, $trusted = false)
+    {
+        $htmlHelper = $this->biz['html_helper'];
+
+        return $htmlHelper->purify($html, $trusted);
     }
 
     protected function getInvoiceTemplateDao()

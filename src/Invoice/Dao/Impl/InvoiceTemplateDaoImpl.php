@@ -8,29 +8,29 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class InvoiceTemplateDaoImpl extends GeneralDaoImpl implements InvoiceTemplateDao
 {
-    protected $table = 'invoice_template';
+    protected $table = 'biz_invoice_template';
 
     public function declares()
     {
         return array(
             'orderbys' => array(
-                'isDefault',
+                'is_default',
                 'id',
-                'createdTime',
+                'created_time',
             ),
             'timestamps' => array(
-                'createdTime',
-                'updatedTime',
+                'created_time',
+                'updated_time',
             ),
             'conditions' => array(
                 'id = :id',
-                'userId = :userId',
+                'user_id = :userId',
             ),
         );
     }
 
     public function getByUserIdAndIsDefault($userId, $isDefault)
     {
-        return $this->getByFields(array('userId' => $userId, 'isDefault' => $isDefault));
+        return $this->getByFields(array('user_id' => $userId, 'is_default' => $isDefault));
     }
 }

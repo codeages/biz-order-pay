@@ -19,5 +19,5 @@ interface InvoiceService
 
     public function updateInvoice($id, $fields);
 
-    public function finishInvoice($id);
+    public function finishInvoice($id, $fields);
 }

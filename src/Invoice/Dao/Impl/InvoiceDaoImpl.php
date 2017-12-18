@@ -8,26 +8,25 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
 {
-    protected $table = 'invoice';
+    protected $table = 'biz_invoice';
 
     public function declares()
     {
         return array(
             'orderbys' => array(
-                'createdTime',
+                'created_time',
             ),
             'serializes' => array(
-                'orderIds' => 'delimiter',
             ),
             'timestamps' => array(
-                'createdTime',
-                'updatedTime',
+                'created_time',
+                'updated_time',
             ),
             'conditions' => array(
                 'id = :id',
-                'userId = :userId',
+                'user_id = :userId',
                 'status = :status',
-                'userId IN ( :userIds)',
+                'user_id IN ( :userIds)',
                 'sn = :sn',
             ),
         );
@@ -37,7 +36,7 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
     public function findByUserId($userId)
     {
         return $this->findByFields(array(
-            'userId' => $userId
+            'user_id' => $userId
         ));
     }
 }
