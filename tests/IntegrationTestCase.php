@@ -2,24 +2,25 @@
 
 namespace Tests;
 
-use Codeages\Biz\Framework\Dao\ArrayStorage;
-use Codeages\Biz\Framework\Dao\Connection;
-use Codeages\Biz\Order\OrderServiceProvider;
-use Codeages\Biz\Pay\PayServiceProvider;
-use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
-use Codeages\Biz\Framework\Provider\RedisServiceProvider;
-use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
-use Codeages\Biz\Framework\Provider\SessionServiceProvider;
-use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
-use Codeages\Biz\Framework\Provider\TokenServiceProvider;
-use Codeages\Biz\Framework\Provider\SettingServiceProvider;
-use Codeages\Biz\Framework\Provider\QueueServiceProvider;
-use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\TestCase;
-use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Order\Subscriber\OrderSubscriber;
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Monolog\Handler\TestHandler;
+use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\Pay\PayServiceProvider;
+use Codeages\Biz\Framework\Dao\Connection;
+use Codeages\Biz\Framework\Dao\ArrayStorage;
+use Codeages\Biz\Order\OrderServiceProvider;
+use Codeages\Biz\Address\AddressServiceProvider;
+use Doctrine\Common\Collections\ArrayCollection;
+use Codeages\Biz\Order\Subscriber\OrderSubscriber;
+use Codeages\Biz\Framework\Provider\QueueServiceProvider;
+use Codeages\Biz\Framework\Provider\RedisServiceProvider;
+use Codeages\Biz\Framework\Provider\TokenServiceProvider;
+use Codeages\Biz\Framework\Provider\SessionServiceProvider;
+use Codeages\Biz\Framework\Provider\SettingServiceProvider;
+use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
+use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
 
 class IntegrationTestCase extends TestCase
 {
@@ -74,12 +75,12 @@ class IntegrationTestCase extends TestCase
                 'host' => getenv('DB_HOST') ?: '127.0.0.1',
                 'port' => getenv('DB_PORT') ?: 3306,
                 'driver' => 'pdo_mysql',
-                'charset' => 'utf8',
+                'charset' => 'utf8'
             ),
             'redis.options' => array(
-                'host' => getenv('REDIS_HOST'),
+                'host' => getenv('REDIS_HOST')
             ),
-            'debug' => true,
+            'debug' => true
         );
         $options = array_merge($defaultOptions, $options);
 
@@ -92,6 +93,7 @@ class IntegrationTestCase extends TestCase
         $biz->register(new SchedulerServiceProvider());
         $biz->register(new OrderServiceProvider());
         $biz->register(new PayServiceProvider());
+        $biz->register(new AddressServiceProvider());
         $biz->register(new SettingServiceProvider());
         $biz->register(new QueueServiceProvider());
         $biz->register(new SessionServiceProvider());
@@ -112,7 +114,7 @@ class IntegrationTestCase extends TestCase
         }
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
-            $biz['dao.cache.array_storage'] = function() {
+            $biz['dao.cache.array_storage'] = function () {
                 return new ArrayStorage();
             };
         }
@@ -138,9 +140,8 @@ class IntegrationTestCase extends TestCase
     }
 
     /**
-     * @param string $seeder
-     * @param bool   $isRun
-     *
+     * @param  string            $seeder
+     * @param  bool              $isRun
      * @return ArrayCollection
      */
     protected function seed($seeder, $isRun = true)
@@ -164,6 +165,7 @@ class IntegrationTestCase extends TestCase
         $builder->select('*')->from($table);
 
         $index = 0;
+
         foreach ($criteria as $key => $value) {
             $builder->andWhere("{$key} = ?");
             $builder->setParameter($index, $value);
@@ -179,6 +181,7 @@ class IntegrationTestCase extends TestCase
         $builder->select('*')->from($table);
 
         $index = 0;
+
         foreach ($criteria as $key => $value) {
             $builder->andWhere("{$key} = ?");
             $builder->setParameter($index, $value);

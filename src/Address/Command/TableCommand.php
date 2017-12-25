@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Order\Command;
+namespace Codeages\Biz\Address\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Codeages\Biz\Framework\Context\AbstractCommand;
@@ -12,8 +12,8 @@ class TableCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('order:table')
-            ->setDescription('Create a migration for the order database table')
+            ->setName('address:table')
+            ->setDescription('Create a migration for the address database table')
             ->addArgument('directory', InputArgument::REQUIRED, 'Migration base directory.', null);
     }
 
@@ -22,8 +22,7 @@ class TableCommand extends AbstractCommand
         $directory = $input->getArgument('directory');
 
         $migrations = array(
-            'order',
-            'order_address'
+            'address'
         );
 
         foreach ($migrations as $migration) {

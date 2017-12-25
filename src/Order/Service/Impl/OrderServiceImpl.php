@@ -2,16 +2,16 @@
 
 namespace Codeages\Biz\Order\Service\Impl;
 
+use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Order\Dao\OrderItemDeductDao;
+use Codeages\Biz\Framework\Service\BaseService;
+use Codeages\Biz\Order\Status\Order\PayingOrderStatus;
+use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Codeages\Biz\Order\Dao\OrderDao;
-use Codeages\Biz\Order\Dao\OrderItemDeductDao;
-use Codeages\Biz\Order\Service\OrderService;
-use Codeages\Biz\Framework\Service\BaseService;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\Order\Status\Order\CreatedOrderStatus;
-use Codeages\Biz\Order\Status\Order\PayingOrderStatus;
 
 class OrderServiceImpl extends BaseService implements OrderService
 {
@@ -132,11 +132,12 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function addOrderItemDeduct($deduct)
     {
         if (!ArrayToolkit::requireds($deduct, array(
-            'order_id','deduct_id', 'deduct_type', 'deduct_amount', 'user_id'))) {
+            'order_id', 'deduct_id', 'deduct_type', 'deduct_amount', 'user_id'))) {
             throw new InvalidArgumentException('Invalid argument.');
         }
 
         $order = $this->getOrder($deduct['order_id']);
+
         if (!in_array($order['status'], array(CreatedOrderStatus::NAME, PayingOrderStatus::NAME))) {
             throw new AccessDeniedException('Order status is invalid.');
         }
@@ -159,6 +160,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $order = $this->getOrder($deduct['order_id']);
+
         if (!in_array($order['status'], array(CreatedOrderStatus::NAME, PayingOrderStatus::NAME))) {
             throw new AccessDeniedException('Order status is invalid.');
         }
@@ -203,6 +205,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $conditions['ids'] = array(0);
 
             $itemResult = $this->getOrderItemDao()->findByConditions($customConditions);
+
             if (!empty($itemResult)) {
                 $ids = ArrayToolkit::column($itemResult, 'order_id');
                 $conditions['ids'] = $ids;
