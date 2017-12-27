@@ -176,7 +176,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $newDeduct;
     }
 
-    public function updateOrderInvoiceSn($orderId, $invoiceSn)
+    public function updateOrderInvoiceSnByOrderId($orderId, $invoiceSn)
     {
         $order = $this->getOrder($orderId);
         if (empty($order)) {

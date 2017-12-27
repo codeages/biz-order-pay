@@ -22,7 +22,7 @@ class BizInvoice extends Migration
               `email` varchar(255) NOT NULL DEFAULT '' COMMENT '电子邮箱',
               `receiver` varchar(100) NOT NULL DEFAULT '' COMMENT '收件人',
               `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
-              `status` enum('unchecked', 'sent', 'cancelled') NOT NULL DEFAULT 'unchecked' COMMENT '申请状态',
+              `status` enum('unchecked', 'sent', 'refused') NOT NULL DEFAULT 'unchecked' COMMENT '申请状态',
               `money` bigint(16) NOT NULL DEFAULT 0 COMMENT '开票金额',
               `review_user_id` int(11) DEFAULT 0 COMMENT '审核人Id',
               `number` varchar(64) DEFAULT '' COMMENT '发票号',
@@ -51,10 +51,6 @@ class BizInvoice extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
         ");
-
-        $connection->exec("
-          ALTER TABLE `biz_order` ADD COLUMN `invoice_sn` varchar(64) default '' COMMENT '申请开票sn' "
-        );
     }
 
     public function down()
@@ -65,7 +61,5 @@ class BizInvoice extends Migration
         $connection->exec('DROP TABLE `biz_invoice`;');
 
         $connection->exec('DROP TABLE `biz_invoice_template`;');
-
-        $connection->exec('ALTER TABLE `biz_order` DROP COLUMN `invoice_sn`;');
     }
 }

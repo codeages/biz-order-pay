@@ -15,34 +15,11 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $this->getInvoiceDao()->get($id);
     }
 
-    public function tryApplyInvoice($orderIds)
-    {
-        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
-
-        $user = $this->biz['user'];
-
-        foreach ($orders as $key => $order) {
-            if ($user['id'] != $order['user_id'] ) {
-                throw new AccessDeniedException('order owner is invalid');
-            }
-
-            if (!empty($order['invoice_sn'])) {
-                throw new AccessDeniedException('order invoiced');
-            }
-        }
-
-        return $orders;
-    }
-
-    public function submitApply($apply)
+    public function applyInvoice($apply)
     {
         $apply = $this->prepareApply($apply);
 
-        $orders = $this->tryApplyInvoice($apply['orderIds']);
-        $money = array_sum(ArrayToolkit::column($orders, 'pay_amount'));
-        if ($apply['money'] != $money) {
-            throw $this->createAccessDeniedException('申请金额和订单金额不符');
-        }
+        $orders = $this->tryApplyInvoice($apply);
 
         try {
             $this->biz['db']->beginTransaction();
@@ -57,7 +34,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             $apply = $this->createInvoice($apply);
 
             foreach ($orders as $order) {
-                $this->getOrderService()->updateOrderInvoiceSn($order['id'], $apply['sn']);
+                $this->getOrderService()->updateOrderInvoiceSnByOrderId($order['id'], $apply['sn']);
             }
 
             $this->biz['db']->commit();
@@ -87,7 +64,33 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
-    public function createInvoice($apply)
+    protected function tryApplyInvoice($apply)
+    {
+        $orders = $this->getOrderService()->findOrdersByIds($apply['orderIds']);
+
+        $user = $this->biz['user'];
+
+        $money = 0;
+        foreach ($orders as $key => $order) {
+            if ($user['id'] != $order['user_id'] ) {
+                throw new AccessDeniedException('order owner is invalid');
+            }
+
+            if (!empty($order['invoice_sn'])) {
+                throw new AccessDeniedException('order invoiced');
+            }
+
+            $money += $order['pay_amount'];
+        }
+
+        if ($apply['money'] != $money) {
+            throw new AccessDeniedException('The application amount does not match the order amount');
+        }
+
+        return $orders;
+    }
+
+    protected function createInvoice($apply)
     {
         if (!ArrayToolkit::requireds($apply, array('title', 'type', 'address', 'phone', 'email', 'receiver', 'money', 'sn'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
@@ -109,7 +112,19 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $htmlHelper->purify($html, $trusted);
     }
 
-    public function updateInvoice($id, $fields)
+    public function finishInvoice($id, $fields)
+    {
+        $finishFields = array(
+            'status' => 'sent',
+            'review_user_id' => $this->biz['user']['id'],
+        );
+
+        $fields = array_merge($fields, $finishFields);
+
+        return $this->updateInvoice($id, $fields);
+    }
+
+    protected function updateInvoice($id, $fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
             'title' => '',
@@ -128,23 +143,6 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         $invoice = $this->getInvoiceDao()->update($id, $fields);
 
         return $invoice;
-    }
-
-    public function finishInvoice($id, $fields)
-    {
-        $finishFields = array(
-            'status' => 'sent',
-            'review_user_id' => $this->biz['user']['id'],
-        );
-
-        $fields = array_merge($fields, $finishFields);
-
-        return $this->updateInvoice($id, $fields);
-    }
-
-    public function findInvoicesByUserId($userId)
-    {
-        return $this->getInvoiceDao()->findByUserId($userId);
     }
 
     public function countInvoice($conditions)
@@ -170,10 +168,5 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
     protected function getInvoiceTemplateService()
     {
         return $this->biz->service('Invoice:InvoiceTemplateService');
-    }
-
-    protected function getLogService()
-    {
-        return $this->biz->service('System:LogService');
     }
 }

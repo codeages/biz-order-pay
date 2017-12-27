@@ -52,5 +52,5 @@ interface OrderService
 
     public function updateOrderItemDeduct($deductId, $updateFields);
 
-    public function updateOrderInvoiceSn($orderId, $invoiceSn);
+    public function updateOrderInvoiceSnByOrderId($orderId, $invoiceSn);
 }
