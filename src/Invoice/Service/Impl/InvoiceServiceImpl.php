@@ -145,7 +145,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $invoice;
     }
 
-    public function countInvoice($conditions)
+    public function countInvoices($conditions)
     {
         return $this->getInvoiceDao()->count($conditions);
     }
