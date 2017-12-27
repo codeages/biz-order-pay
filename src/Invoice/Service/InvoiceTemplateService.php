@@ -12,7 +12,7 @@ interface InvoiceTemplateService
 
     public function searchInvoiceTemplates($conditions, $sort, $start, $limit);
 
-    public function searchInvoiceTemplateCount($conditions);
+    public function countInvoiceTemplates($conditions);
 
     public function getInvoiceTemplate($id);
 

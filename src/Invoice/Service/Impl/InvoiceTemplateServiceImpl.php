@@ -48,7 +48,7 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
         return $this->getInvoiceTemplateDao()->search($conditions, $sort, $start, $limit);
     }
 
-    public function searchInvoiceTemplateCount($conditions)
+    public function countInvoiceTemplates($conditions)
     {
         return $this->getInvoiceTemplateDao()->count($conditions);
     }
