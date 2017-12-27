@@ -53,14 +53,17 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
         return $this->getInvoiceTemplateDao()->count($conditions);
     }
 
-    public function setDefalutTemplate($id, $userId)
+    public function setDefalutTemplate($id)
     {
-        $template = $this->getDefaultTemplate($userId);
-        if ($template) {
-            $template['is_default'] = '0';
-            $this->updateInvoiceTemplate($template['id'], $template);
-        }
         $template = $this->getInvoiceTemplate($id);
+
+        $userId = $template['user_id'];
+        $defualtTemplate = $this->getDefaultTemplate($userId);
+        if ($defualtTemplate) {
+            $defualtTemplate['is_default'] = '0';
+            $this->updateInvoiceTemplate($defualtTemplate['id'], $defualtTemplate);
+        }
+
         $template['is_default'] = '1';
 
         return $this->updateInvoiceTemplate($id, $template);

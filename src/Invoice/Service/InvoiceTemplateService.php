@@ -16,7 +16,7 @@ interface InvoiceTemplateService
 
     public function getInvoiceTemplate($id);
 
-    public function setDefalutTemplate($id, $userId);
+    public function setDefalutTemplate($id);
 
     public function getDefaultTemplate($userId);
 }
