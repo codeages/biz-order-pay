@@ -29,8 +29,8 @@ class InvoiceTemplateDaoImpl extends GeneralDaoImpl implements InvoiceTemplateDa
         );
     }
 
-    public function getByUserIdAndIsDefault($userId, $isDefault)
+    public function getDefaultByUserId($userId)
     {
-        return $this->getByFields(array('user_id' => $userId, 'is_default' => $isDefault));
+        return $this->getByFields(array('user_id' => $userId, 'is_default' => 1));
     }
 }

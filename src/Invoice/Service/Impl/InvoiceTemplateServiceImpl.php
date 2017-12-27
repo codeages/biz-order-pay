@@ -71,7 +71,7 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
 
     public function getDefaultTemplate($userId)
     {
-        return $this->getInvoiceTemplateDao()->getByUserIdAndIsDefault($userId, 1);
+        return $this->getInvoiceTemplateDao()->getDefaultByUserId($userId);
     }
 
     protected function validateInvoiceTemplateFields($fields)

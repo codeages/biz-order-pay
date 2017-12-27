@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface InvoiceTemplateDao extends GeneralDaoInterface
 {
-    public function getByUserIdAndIsDefault($userId, $isDefault);
+    public function getDefaultByUserId($userId);
 }
