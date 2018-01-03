@@ -32,11 +32,4 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
         );
 
     }
-
-    public function findByUserId($userId)
-    {
-        return $this->findByFields(array(
-            'user_id' => $userId
-        ));
-    }
 }

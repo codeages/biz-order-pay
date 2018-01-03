@@ -12,8 +12,6 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
     {
         $this->validateInvoiceTemplateFields($invoice);
 
-        $invoice['comment'] = $this->purifyHtml($invoice['comment'], true);
-
         $user = $this->biz['user'];
         $template = $this->getDefaultTemplate($user['id']);
         if (empty($template)) {
@@ -53,15 +51,15 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
         return $this->getInvoiceTemplateDao()->count($conditions);
     }
 
-    public function setDefalutTemplate($id)
+    public function setDefaultTemplate($id)
     {
         $template = $this->getInvoiceTemplate($id);
 
         $userId = $template['user_id'];
-        $defualtTemplate = $this->getDefaultTemplate($userId);
-        if ($defualtTemplate) {
-            $defualtTemplate['is_default'] = '0';
-            $this->updateInvoiceTemplate($defualtTemplate['id'], $defualtTemplate);
+        $defaultTemplate = $this->getDefaultTemplate($userId);
+        if ($defaultTemplate) {
+            $defaultTemplate['is_default'] = '0';
+            $this->updateInvoiceTemplate($defaultTemplate['id'], $defaultTemplate);
         }
 
         $template['is_default'] = '1';
@@ -109,13 +107,6 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
                 'is_default',
             )
         );
-    }
-
-    protected function purifyHtml($html, $trusted = false)
-    {
-        $htmlHelper = $this->biz['html_helper'];
-
-        return $htmlHelper->purify($html, $trusted);
     }
 
     protected function getInvoiceTemplateDao()

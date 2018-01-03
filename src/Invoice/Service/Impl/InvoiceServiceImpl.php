@@ -39,6 +39,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
 
             $this->biz['db']->commit();
         } catch (\Exception $e) {
+            $this->biz['db']->rollback();
             throw $e;
         }
 
@@ -98,18 +99,9 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
 
         $apply = ArrayToolkit::parts($apply, array('title', 'type', 'taxpayer_identity', 'comment', 'address', 'phone', 'email', 'receiver', 'money', 'user_id', 'sn'));
 
-        $apply['comment'] = $this->purifyHtml($apply['comment'], true);
-
         $apply = $this->getInvoiceDao()->create($apply);
 
         return $apply;
-    }
-
-    protected function purifyHtml($html, $trusted = false)
-    {
-        $htmlHelper = $this->biz['html_helper'];
-
-        return $htmlHelper->purify($html, $trusted);
     }
 
     public function finishInvoice($id, $fields)
