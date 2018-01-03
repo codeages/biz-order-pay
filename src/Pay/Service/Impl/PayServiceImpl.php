@@ -326,8 +326,8 @@ class PayServiceImpl extends BaseService implements PayService
 
     protected function refundPlatformTrade($trade)
     {
-        $paymentGetWay = $this->getPayment($trade['platform']);
-        $response = $paymentGetWay->applyRefund($trade);
+        $paymentGateway = $this->getPayment($trade['platform']);
+        $response = $paymentGateway->applyRefund($trade);
 
         if (!$response->isSuccessful()) {
             return $trade;
@@ -344,8 +344,8 @@ class PayServiceImpl extends BaseService implements PayService
 
     public function notifyRefunded($payment, $data)
     {
-        $paymentGetWay = $this->getPayment($payment);
-        list($result, $response) = $paymentGetWay->converterRefundNotify($data);
+        $paymentGateway = $this->getPayment($payment);
+        list($result, $response) = $paymentGateway->converterRefundNotify($data);
         $tradeSn = $result['trade_sn'];
 
         $this->updateTradeToRefunded($tradeSn, $data);

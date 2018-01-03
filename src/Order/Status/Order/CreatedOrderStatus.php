@@ -2,8 +2,8 @@
 
 namespace Codeages\Biz\Order\Status\Order;
 
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CreatedOrderStatus extends AbstractOrderStatus
 {
@@ -14,7 +14,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
         return self::NAME;
     }
 
-    public function process($data = array())
+    public function process($data)
     {
         $orderItems = $this->validateFields($data['order'], $data['orderItems']);
         $order = ArrayToolkit::parts($data['order'], array(
@@ -28,11 +28,14 @@ class CreatedOrderStatus extends AbstractOrderStatus
             'deducts',
             'create_extra',
             'device',
-            'expired_refund_days'
+            'expired_refund_days',
+            'address'
         ));
 
         $orderDeducts = empty($order['deducts']) ? array() : $order['deducts'];
         unset($order['deducts']);
+        $orderAddress = empty($order['address']) ? array() : $order['address'];
+        unset($order['address']);
 
         $data = array(
             'order' => $order,
@@ -43,8 +46,24 @@ class CreatedOrderStatus extends AbstractOrderStatus
         $order = $this->saveOrder($data);
         $order = $this->createOrderDeducts($order, $data['orderDeducts']);
         $order = $this->createOrderItems($order, $data['orderItems']);
+        $order = $this->createOrderAddress($order, $orderAddress);
 
         return $order;
+    }
+
+    public function closed($data = array())
+    {
+        return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);
+    }
+
+    public function paid($data = array())
+    {
+        return $this->getOrderStatus(PaidOrderStatus::NAME)->process($data);
+    }
+
+    public function paying($data = array())
+    {
+        return $this->getOrderStatus(PayingOrderStatus::NAME)->process($data);
     }
 
     protected function validateFields($order, $orderItems)
@@ -61,6 +80,10 @@ class CreatedOrderStatus extends AbstractOrderStatus
                 'target_type'))) {
                 throw new InvalidArgumentException('args is invalid.');
             }
+        }
+
+        if ($item['is_real'] && empty($order['address'])) {
+            throw new InvalidArgumentException('args is invalid.');
         }
 
         return $orderItems;
@@ -86,7 +109,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
     {
         $orderInfo = ArrayToolkit::parts($order, array(
             'user_id',
-            'seller_id',
+            'seller_id'
         ));
         $orderInfo['order_id'] = $order['id'];
         $order['deducts'] = $this->createDeducts($orderInfo, $deducts);
@@ -96,12 +119,15 @@ class CreatedOrderStatus extends AbstractOrderStatus
     protected function countOrderPriceAmount($items)
     {
         $priceAmount = 0;
+
         foreach ($items as $item) {
             $priceAmount = $priceAmount + $item['price_amount'];
         }
+
         return $priceAmount;
     }
 
+    // TODO: 不暴露方法
     public static function countOrderPayAmount($payAmount, $orderDeducts, $items)
     {
         foreach ($orderDeducts as $deduct) {
@@ -118,7 +144,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
             }
         }
 
-        if ($payAmount<0) {
+        if ($payAmount < 0) {
             $payAmount = 0;
         }
 
@@ -133,12 +159,15 @@ class CreatedOrderStatus extends AbstractOrderStatus
     protected function createOrderItems($order, $items)
     {
         $savedItems = array();
+
         foreach ($items as $item) {
             $deducts = array();
+
             if (!empty($item['deducts'])) {
                 $deducts = $item['deducts'];
                 unset($item['deducts']);
             }
+
             $item['order_id'] = $order['id'];
             $item['seller_id'] = $order['seller_id'];
             $item['user_id'] = $order['user_id'];
@@ -171,6 +200,7 @@ class CreatedOrderStatus extends AbstractOrderStatus
     protected function createDeducts($item, $deducts)
     {
         $savedDeducts = array();
+
         foreach ($deducts as $deduct) {
             $deduct['item_id'] = empty($item['id']) ? 0 : $item['id'];
             $deduct['order_id'] = $item['order_id'];
@@ -178,21 +208,26 @@ class CreatedOrderStatus extends AbstractOrderStatus
             $deduct['user_id'] = $item['user_id'];
             $savedDeducts[] = $this->getOrderItemDeductDao()->create($deduct);
         }
+
         return $savedDeducts;
     }
 
-    public function closed($data = array())
+    protected function createOrderAddress($order, $orderAddress)
     {
-        return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);
+        if (empty($orderAddress)) {
+            return $order;
+        }
+
+        $orderAddress['order_id'] = $order['id'];
+        $orderAddress = $this->getOrderAddressService()->createOrderAddress($orderAddress);
+
+        $order['orderAddress'] = $orderAddress;
+
+        return $order;
     }
 
-    public function paid($data = array())
+    protected function getOrderAddressService()
     {
-        return $this->getOrderStatus(PaidOrderStatus::NAME)->process($data);
-    }
-
-    public function paying($data = array())
-    {
-        return $this->getOrderStatus(PayingOrderStatus::NAME)->process($data);
+        return $this->biz->service('Order:OrderAddressService');
     }
 }
