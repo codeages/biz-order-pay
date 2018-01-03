@@ -22,7 +22,8 @@ class TableCommand extends AbstractCommand
         $directory = $input->getArgument('directory');
 
         $migrations = array(
-            'order',
+            'order'
+            'shipping_type',
             'order_address'
         );
 

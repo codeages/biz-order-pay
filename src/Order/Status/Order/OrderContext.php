@@ -138,7 +138,7 @@ class OrderContext
         $results = array_unique($results);
         if ($status == PaidOrderStatus::NAME) {
             if (in_array(OrderStatusCallback::SUCCESS, $results) && count($results) == 1) {
-                $this->getWorkflowService()->finish($order['id']);
+                $this->getWorkflowService()->shipping($order['id']);
                 if ($order['refund_deadline'] == 0) {
                     $this->getWorkflowService()->finished($order['id']);
                 }
