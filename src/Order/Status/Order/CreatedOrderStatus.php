@@ -28,14 +28,11 @@ class CreatedOrderStatus extends AbstractOrderStatus
             'deducts',
             'create_extra',
             'device',
-            'expired_refund_days',
-            'address'
+            'expired_refund_days'
         ));
 
         $orderDeducts = empty($order['deducts']) ? array() : $order['deducts'];
         unset($order['deducts']);
-        $orderAddress = empty($order['address']) ? array() : $order['address'];
-        unset($order['address']);
 
         $data = array(
             'order' => $order,
@@ -46,7 +43,6 @@ class CreatedOrderStatus extends AbstractOrderStatus
         $order = $this->saveOrder($data);
         $order = $this->createOrderDeducts($order, $data['orderDeducts']);
         $order = $this->createOrderItems($order, $data['orderItems']);
-        $order = $this->createOrderAddress($order, $orderAddress);
 
         return $order;
     }
@@ -80,10 +76,6 @@ class CreatedOrderStatus extends AbstractOrderStatus
                 'target_type'))) {
                 throw new InvalidArgumentException('args is invalid.');
             }
-        }
-
-        if ($item['is_real'] && empty($order['address'])) {
-            throw new InvalidArgumentException('args is invalid.');
         }
 
         return $orderItems;
@@ -210,24 +202,5 @@ class CreatedOrderStatus extends AbstractOrderStatus
         }
 
         return $savedDeducts;
-    }
-
-    protected function createOrderAddress($order, $orderAddress)
-    {
-        if (empty($orderAddress)) {
-            return $order;
-        }
-
-        $orderAddress['order_id'] = $order['id'];
-        $orderAddress = $this->getOrderAddressService()->createOrderAddress($orderAddress);
-
-        $order['orderAddress'] = $orderAddress;
-
-        return $order;
-    }
-
-    protected function getOrderAddressService()
-    {
-        return $this->biz->service('Order:OrderAddressService');
     }
 }
