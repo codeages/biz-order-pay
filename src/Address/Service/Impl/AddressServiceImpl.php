@@ -70,7 +70,7 @@ class AddressServiceImpl extends BaseService implements AddressService
 
         $address = $this->getAddressDao()->update($id, $fields);
 
-        if ($fields['is_default']) {
+        if (!empty($fields['is_default'])) {
             $this->changeDefaultAddress($address['user_id'], $address['id']);
         }
 

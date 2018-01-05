@@ -76,50 +76,10 @@ class AddressServiceTest extends IntegrationTestCase
     /**
      * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
-    public function testCreateAddressWithoutCity()
-    {
-        $address = $this->mockAddress();
-        unset($address['city']);
-        $this->getAddressService()->createAddress($address);
-    }
-
-    /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
-    public function testCreateAddressWithoutDistrict()
-    {
-        $address = $this->mockAddress();
-        unset($address['district']);
-        $this->getAddressService()->createAddress($address);
-    }
-
-    /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
-    public function testCreateAddressWithoutTown()
-    {
-        $address = $this->mockAddress();
-        unset($address['town']);
-        $this->getAddressService()->createAddress($address);
-    }
-
-    /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
     public function testCreateAddressWithoutDetail()
     {
         $address = $this->mockAddress();
         unset($address['detail']);
-        $this->getAddressService()->createAddress($address);
-    }
-
-    /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
-    public function testCreateAddressWithoutZip()
-    {
-        $address = $this->mockAddress();
-        unset($address['zip']);
         $this->getAddressService()->createAddress($address);
     }
 
