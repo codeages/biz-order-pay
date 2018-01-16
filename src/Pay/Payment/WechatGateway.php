@@ -143,7 +143,7 @@ class WechatGateway extends AbstractGateway
 
     public function closeTrade($trade)
     {
-        $gateway = $this->createGetWay("WechatPay");
+        $gateway = $this->createGateway("WechatPay");
 
         $response = $gateway->close(array(
             'out_trade_no' => $trade['trade_sn']
