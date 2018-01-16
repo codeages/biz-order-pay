@@ -141,6 +141,17 @@ class WechatGateway extends AbstractGateway
         return $response;
     }
 
+    public function closeTrade($trade)
+    {
+        $gateway = $this->createGetWay("WechatPay");
+
+        $response = $gateway->close(array(
+            'out_trade_no' => $trade['trade_sn']
+        ))->send();
+
+        return $response;
+    }
+
     public function converterRefundNotify($data)
     {
         $gateway = $this->createGateway('WechatPay');
