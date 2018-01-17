@@ -14,6 +14,8 @@ interface WorkflowService
 
     public function finish($orderId, $data = array());
 
+    public function shipping($orderId, $data = array());
+
     public function fail($orderId, $data = array());
 
     public function finished($orderId, $data = array());

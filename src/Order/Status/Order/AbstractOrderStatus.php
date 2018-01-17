@@ -13,7 +13,7 @@ abstract class AbstractOrderStatus implements OrderStatus
 
     abstract public function process($data);
 
-    function __construct($biz)
+    public function __construct($biz)
     {
         $this->biz = $biz;
     }
@@ -68,22 +68,25 @@ abstract class AbstractOrderStatus implements OrderStatus
     protected function changeStatus($name)
     {
         $order = $this->getOrderDao()->update($this->order['id'], array(
-            'status' => $name,
+            'status' => $name
         ));
 
         $items = $this->getOrderItemDao()->findByOrderId($this->order['id']);
+
         foreach ($items as $item) {
             $this->getOrderItemDao()->update($item['id'], array(
-                'status' => $name,
+                'status' => $name
             ));
         }
 
         $deducts = $this->getOrderItemDeductDao()->findByOrderId($this->order['id']);
+
         foreach ($deducts as $key => $deduct) {
             $deducts[$key] = $this->getOrderItemDeductDao()->update($deduct['id'], array(
                 'status' => $name
             ));
         }
+
         return $order;
     }
 

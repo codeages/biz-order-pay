@@ -2,8 +2,8 @@
 
 namespace Codeages\Biz\Order\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\DaoException;
 use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Framework\Dao\DaoException;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
@@ -51,6 +51,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
             ->setMaxResults($limit);
 
         $declares = $this->declares();
+
         foreach ($orderBys ?: array() as $order => $sort) {
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($order, $sort);
@@ -64,7 +65,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select("sum(`pay_amount`) as payAmount, sum(`paid_cash_amount`) as cashAmount, sum(`paid_coin_amount`) as coinAmount");
 
-        return $builder->execute()->fetch();  
+        return $builder->execute()->fetch();
     }
 
     public function sumGroupByDate($column, $conditions, $sort, $dateColumn = 'pay_time')
@@ -112,6 +113,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
+
         return false;
     }
 
@@ -122,6 +124,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         if (in_array($column, $whiteList)) {
             return true;
         }
+
         return false;
     }
 
@@ -142,6 +145,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
             );
         }
+
         if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
             throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
@@ -161,11 +165,11 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'callback' => 'json',
                 'create_extra' => 'json',
                 'success_data' => 'json',
-                'fail_data' => 'json',
+                'fail_data' => 'json'
             ),
             'orderbys' => array(
                 'id',
-                'created_time',
+                'created_time'
             ),
             'conditions' => array(
                 'id IN (:ids)',
@@ -177,7 +181,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'pay_time > :pay_time_GT',
                 'pay_amount > :pay_amount_GT',
                 'price_amount > :price_amount_GT',
-                'source = :source', 
+                'source = :source',
                 'status = :status',
                 'status IN (:statuses)',
                 'seller_id = :seller_id',
@@ -185,8 +189,8 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'created_time <= :end_time',
                 'title LIKE :title_like',
                 'updated_time >= :updated_time_GE',
-                'refund_deadline < :refund_deadline_LT',
-            ),
+                'refund_deadline < :refund_deadline_LT'
+            )
         );
     }
 }

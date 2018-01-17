@@ -11,7 +11,8 @@
     "autoload": {
         "psr-4": {
             "Codeages\\Biz\\Order\\": "src/Order/",
-            "Codeages\\Biz\\Pay\\": "src/Pay/"
+            "Codeages\\Biz\\Pay\\": "src/Pay/",
+            "Codeages\\Biz\\Address\\": "src/Address/",
         }
     },
     "autoload-dev": {

@@ -3,17 +3,17 @@
 namespace Codeages\Biz\Order\Service\Impl;
 
 use Codeages\Biz\Order\Dao\OrderDao;
-use Codeages\Biz\Order\Dao\OrderItemDao;
-use Codeages\Biz\Order\Dao\OrderItemDeductDao;
-use Codeages\Biz\Order\Dao\OrderRefundDao;
 use Codeages\Biz\Order\Dao\OrderLogDao;
+use Codeages\Biz\Order\Dao\OrderItemDao;
+use Codeages\Biz\Pay\Service\PayService;
+use Codeages\Biz\Order\Dao\OrderRefundDao;
 use Codeages\Biz\Order\Service\OrderService;
-use Codeages\Biz\Order\Service\WorkflowService;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Order\Dao\OrderItemDeductDao;
 use Codeages\Biz\Framework\Service\BaseService;
+use Codeages\Biz\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
-use Codeages\Biz\Pay\Service\PayService;
 
 class WorkflowServiceImpl extends BaseService implements WorkflowService
 {
@@ -35,6 +35,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
 
             return $this->paid($data);
         }
+
         return $order;
     }
 
@@ -53,9 +54,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function paid($data)
     {
         $order = $this->getOrderDao()->getBySn($data['order_sn']);
+
         if (empty($order)) {
             return $order;
         }
+
         return $this->getOrderContext($order['id'])->paid($data);
     }
 
@@ -67,6 +70,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function finish($orderId, $data = array())
     {
         return $this->getOrderContext($orderId)->success($data);
+    }
+
+    public function shipping($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->shipping($data);
     }
 
     public function fail($orderId, $data = array())
@@ -84,9 +92,9 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $options = $this->biz['order.final_options'];
 
         $orders = $this->getOrderDao()->search(array(
-            'created_time_LT' => time()-$options['closed_expired_time'],
+            'created_time_LT' => time() - $options['closed_expired_time'],
             'statuses' => array('created', 'paying')
-        ), array('id'=>'DESC'), 0, 1000);
+        ), array('id' => 'DESC'), 0, 1000);
 
         foreach ($orders as $order) {
             $this->close($order['id']);
@@ -97,7 +105,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $orders = $this->getOrderDao()->search(array(
             'refund_deadline_LT' => time(),
-            'status' => 'success',
+            'status' => 'success'
         ), array('id' => 'DESC'), 0, 1000);
 
         if (empty($orders)) {
@@ -198,7 +206,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         if ($adjustDeduct) {
             $newAdjustDeduct = $this->getOrderService()->updateOrderItemDeduct($adjustDeduct['id'], array(
                 'deduct_amount' => $adjustAmount,
-                'user_id' => $order['user_id'],
+                'user_id' => $order['user_id']
             ));
         } else {
             $newAdjustDeduct = $this->getOrderService()->addOrderItemDeduct(array(
@@ -207,7 +215,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
                 'deduct_type' => 'adjust_price',
                 'deduct_id' => 0,
                 'deduct_amount' => $adjustAmount,
-                'user_id' => $order['user_id'],
+                'user_id' => $order['user_id']
             ));
         }
 
@@ -222,6 +230,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $totalDeductAmountExcludeAdjust = 0;
         $adjustDeduct = array();
+
         foreach ($deducts as $deduct) {
             if ($deduct['deduct_type'] == 'adjust_price') {
                 $adjustDeduct = $deduct;
@@ -242,6 +251,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         }
 
         $orderRefund = $this->getOrderRefundDao()->get($id);
+
         if (empty($orderRefund)) {
             throw $this->createNotFoundException("order #{$orderRefund['id']} is not found");
         }
@@ -260,6 +270,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         }
 
         $order = $this->getOrderDao()->get($orderId);
+
         if (empty($order)) {
             throw $this->createNotFoundException("order #{$order['id']} is not found");
         }
@@ -337,7 +348,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             'orderId' => $order['id'],
             'oldPrice' => $order['pay_amount'],
             'newPrice' => $newPayAmount,
-            'adjust_amount' => $adjustAmount,
+            'adjust_amount' => $adjustAmount
         );
 
         $orderLog = array(
@@ -345,7 +356,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             'order_id' => $order['id'],
             'user_id' => $this->biz['user']['id'],
             'deal_data' => $logData,
-            'ip' => empty($this->biz['user']['currentIp']) ? '' : $this->biz['user']['currentIp'],
+            'ip' => empty($this->biz['user']['currentIp']) ? '' : $this->biz['user']['currentIp']
         );
 
         $this->getOrderLogDao()->create($orderLog);
