@@ -24,7 +24,6 @@ class TableCommand extends AbstractCommand
         $migrations = array(
             'order',
             'order_add_deduct_type_name',
-            'order_update_deduct_type_name',
         );
 
         foreach ($migrations as $migration) {
