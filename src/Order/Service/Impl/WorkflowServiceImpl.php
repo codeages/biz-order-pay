@@ -100,7 +100,27 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
             'status' => 'success',
         ), array('id' => 'DESC'), 0, 1000);
 
+        if (empty($orders)) {
+            return;
+        }
+
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderRefunds = $this->getOrderRefundDao()->search(
+            array(
+                'status' => 'auditing',
+                'order_ids' => $orderIds
+            ),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        $orderRefunds = ArrayToolkit::index($orderRefunds, 'order_id');
+        
         foreach ($orders as $order) {
+            if (!empty($orderRefunds[$order['id']])) {
+                continue;
+            }
+            
             $this->finished($order['id']);
         }
     }
@@ -167,10 +187,6 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     {
         $order = $this->getOrderService()->getOrder($orderId);
 
-        if ($order['pay_amount'] == $newPayAmount) {
-            return null;
-        }
-
         $deducts = $this->getOrderService()->findOrderItemDeductsByOrderId($orderId);
         list($totalDeductAmountExcludeAdjust, $adjustDeduct) = $this->getTotalDeductExcludeAdjust($deducts);
         $adjustAmount = $order['price_amount'] - $newPayAmount - $totalDeductAmountExcludeAdjust;
@@ -189,6 +205,7 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
                 'order_id' => $order['id'],
                 'item_id' => 0,
                 'deduct_type' => 'adjust_price',
+                'deduct_type_name' => '改价',
                 'deduct_id' => 0,
                 'deduct_amount' => $adjustAmount,
                 'user_id' => $order['user_id'],
