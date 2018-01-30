@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Dao\ArrayStorage;
 use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Order\OrderServiceProvider;
 use Codeages\Biz\Pay\PayServiceProvider;
+use Codeages\Biz\Invoice\InvoiceServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
@@ -112,6 +113,7 @@ class IntegrationTestCase extends TestCase
         $biz->register(new SettingServiceProvider());
         $biz->register(new QueueServiceProvider());
         $biz->register(new SessionServiceProvider());
+        $biz->register(new InvoiceServiceProvider());
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
