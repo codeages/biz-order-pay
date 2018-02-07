@@ -274,7 +274,7 @@ class PayServiceTest extends IntegrationTestCase
             'product_id' => 1,
         );
 
-        $mock = \Mockery::mock(IapGateway::class);
+        $mock = \Mockery::mock("Codeages\\Biz\\Pay\\Payment\\IapGateway");
         $mock->shouldReceive('converterNotify')->andReturn(array($return, 'success'));
         return $mock;
     }
