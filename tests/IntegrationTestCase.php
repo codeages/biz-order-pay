@@ -8,7 +8,6 @@ use Codeages\Biz\Order\OrderServiceProvider;
 use Codeages\Biz\Pay\PayServiceProvider;
 use Codeages\Biz\Invoice\InvoiceServiceProvider;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
-use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
 use Codeages\Biz\Framework\Provider\SessionServiceProvider;
 use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
@@ -39,29 +38,18 @@ class IntegrationTestCase extends TestCase
      */
     protected $db;
 
-    /**
-     * @var \Redis|\RedisArray
-     */
-    protected $redis;
-
     public function setUp()
     {
         $this->biz = $this->createBiz();
         $this->db = $this->biz['db'];
-
-        $this->redis = $this->biz['redis'];
-
         $this->db->beginTransaction();
-        $this->redis->flushDB();
     }
 
     public function tearDown()
     {
         $this->db->rollBack();
-        $this->redis->close();
 
         unset($this->db);
-        unset($this->redis);
         unset($this->biz);
     }
 
@@ -94,9 +82,6 @@ class IntegrationTestCase extends TestCase
                 'driver' => 'pdo_mysql',
                 'charset' => 'utf8',
             ),
-            'redis.options' => array(
-                'host' => getenv('REDIS_HOST'),
-            ),
             'debug' => true,
         );
         $options = array_merge($defaultOptions, $options);
@@ -104,7 +89,6 @@ class IntegrationTestCase extends TestCase
         $biz = new Biz($options);
         $biz['autoload.aliases']['Example'] = 'Tests\\Example';
         $biz->register(new DoctrineServiceProvider());
-        $biz->register(new RedisServiceProvider());
         $biz->register(new TargetlogServiceProvider());
         $biz->register(new TokenServiceProvider());
         $biz->register(new SchedulerServiceProvider());
