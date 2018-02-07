@@ -416,7 +416,7 @@ class PayServiceTest extends IntegrationTestCase
             $return['trade_sn'] = $notifyData['out_trade_no'];
         }
 
-        $mock = \Mockery::mock(WechatGateway::class);
+        $mock = \Mockery::mock("Codeages\\Biz\\Pay\\Payment\\WechatGateway");
         $mock->shouldReceive('converterNotify')->andReturn(array($return, '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'));
         return $mock;
     }
@@ -447,7 +447,7 @@ class PayServiceTest extends IntegrationTestCase
             'result_code' => 'SUCCESS',
         );
 
-        $mock = \Mockery::mock(WechatGateway::class);
+        $mock = \Mockery::mock("Codeages\\Biz\\Pay\\Payment\\WechatGateway");
         $mock->shouldReceive('createTrade')->andReturn($return);
         $mock->shouldReceive('closeTrade')->andReturn(new CloseOrderResponseTest());
         return $mock;
