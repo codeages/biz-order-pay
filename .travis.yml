@@ -11,6 +11,7 @@ php:
   - '7.0'
 
 before_script:
+  - composer install
   - mysql -e 'CREATE DATABASE `order-pay-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
 
 script:
