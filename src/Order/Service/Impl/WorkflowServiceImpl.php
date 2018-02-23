@@ -158,7 +158,6 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         if (!empty($order['trade_sn'])) {
             $this->getPayService()->applyRefundByTradeSn($order['trade_sn'], $data);
         } else {
-            // 无trade_sn的订单能支持退款（如微营销）
             $this->setRefunded($id, $data);
         }
 
