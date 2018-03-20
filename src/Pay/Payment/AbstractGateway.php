@@ -2,8 +2,6 @@
 
 namespace Codeages\Biz\Pay\Payment;
 
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-
 abstract class AbstractGateway
 {
     protected $biz;
@@ -15,8 +13,7 @@ abstract class AbstractGateway
 
     public function closeTrade($trade)
     {
-        // throw new AccessDeniedException('can not close trade.');
-        return;
+        return new AbstractResponse(true);
     }
 
     abstract public function createTrade($data);
