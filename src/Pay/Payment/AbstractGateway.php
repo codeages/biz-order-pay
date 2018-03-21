@@ -1,7 +1,9 @@
 <?php
 
 namespace Codeages\Biz\Pay\Payment;
+
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Pay\Message\CloseTradeResponse;
 
 abstract class AbstractGateway
 {
@@ -14,7 +16,7 @@ abstract class AbstractGateway
 
     public function closeTrade($trade)
     {
-        return new AbstractResponse(true);
+        return new CloseTradeResponse(true);
     }
 
     abstract public function createTrade($data);

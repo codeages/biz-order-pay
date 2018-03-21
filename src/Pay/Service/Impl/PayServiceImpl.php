@@ -227,7 +227,7 @@ class PayServiceImpl extends BaseService implements PayService
     {
         $response = $this->getPayment($data['platform'])->closeTrade($data);
         if (!empty($response) && !$response->isSuccessful()) {
-            $failData = $response->getFailData();
+            $failData = $response->getMessage();
             $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.close_failed', $data['trade_sn'], "交易号{$data['trade_sn']}关闭失败,{$failData},(order_sn:{$data['order_sn']})", $data);
         } else {
             $this->getTargetlogService()->log(TargetlogService::INFO, 'trade.close', $data['trade_sn'], "交易号{$data['trade_sn']}关闭成功。(order_sn:{$data['order_sn']})", $data);
