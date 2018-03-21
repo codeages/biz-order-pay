@@ -18,7 +18,7 @@ class PayServiceProvider implements ServiceProviderInterface
 
         $biz['payment.final_options'] = function () use ($biz) {
             $options = array(
-                'closed_by_notify' => true,
+                'closed_by_notify' => false,
                 'refunded_by_notify' => false,
                 'coin_rate' => 1,
                 'goods_title' => '',
