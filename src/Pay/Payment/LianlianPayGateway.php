@@ -133,7 +133,8 @@ class LianlianPayGateway extends AbstractGateway
         if (!empty($params['return_url'])) {
             $converted['url_return'] = $params['return_url'];
         }
-        $userId = array_pop(explode("_", $converted['user_id']));
+        $ids = explode("_", $converted['user_id']);
+        $userId = array_pop($ids);
         $user = $this->getUserService()->getUser($userId);
         $bindPhone = $this->processBindPhone($user);
         $converted['risk_item']  = json_encode(array(
