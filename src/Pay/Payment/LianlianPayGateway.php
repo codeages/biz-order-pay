@@ -133,15 +133,11 @@ class LianlianPayGateway extends AbstractGateway
         if (!empty($params['return_url'])) {
             $converted['url_return'] = $params['return_url'];
         }
-        $ids = explode("_", $converted['user_id']);
-        $userId = array_pop($ids);
-        $user = $this->getUserService()->getUser($userId);
-        $bindPhone = $this->processBindPhone($user);
         $converted['risk_item']  = json_encode(array(
             'frms_ware_category'=>1008,
             'user_info_mercht_userno'=>$params['attach']['identify_user_id'],
             'user_info_dt_register'=>date('YmdHis', $params['attach']['user_created_time']),
-            'user_info_bind_phone' => $bindPhone
+            'user_info_bind_phone' => $params['attach']['bindPhone']
         ));
 
         $converted['userreq_ip'] = str_replace(".", "_", $params['create_ip']);
@@ -190,21 +186,5 @@ class LianlianPayGateway extends AbstractGateway
             'oid_partner' => $config['oid_partner'],
             'signatureToolkit' => $config['signatureToolkit'],
         );
-    }
-
-    protected function getUserService()
-    {
-        return $this->biz->service('User:UserService');
-    }
-
-    private function processBindPhone($user)
-    {
-        $bindPhone = '';
-        if (!empty($user['verifiedMobile'])) {
-            $head = substr($user['verifiedMobile'], 0, 3);
-            $tail = substr($user['verifiedMobile'], -4, 4);
-            $bindPhone = $head.'****'.$tail;
-        }
-        return $bindPhone;
     }
 }
