@@ -40,8 +40,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     public function testFinishOrderRefund()
     {
         $orderRefund = $this->mockOrderRefund();
-        $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
-        $orderRefund = $this->getWorkflowService()->setRefunded($orderRefund['id']);
+        $orderRefund = $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
         $this->assertEquals('refunded', $orderRefund['status']);
         $this->assertNotEmpty($orderRefund['deal_time']);
         $this->assertNotEmpty($orderRefund['deal_reason']);
@@ -68,8 +67,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     public function testSetRefundedOrderItemRefunds()
     {
         $orderRefund = $this->mockOrderItemRefunds();
-        $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '对该课程不感兴趣'));
-        $orderRefund = $this->getWorkflowService()->setRefunded($orderRefund['id']);
+        $orderRefund = $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '对该课程不感兴趣'));
         $this->assertEquals('refunded', $orderRefund['status']);
         $this->assertNotEmpty($orderRefund['deal_time']);
         $this->assertNotEmpty($orderRefund['deal_reason']);
