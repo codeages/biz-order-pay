@@ -26,7 +26,7 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $orderItems = $this->mockOrderItems();
         $order = $this->mockOrder();
-        unset($this->biz['user']);
+        unset($this->biz['user']['id']);
         $this->getWorkflowService()->start($order, $orderItems);
     }
 

@@ -22,7 +22,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     public function testFinishOrderRefundWithoutCurrentUser()
     {
         $orderRefund = $this->mockOrderRefund();
-        unset($this->biz['user']);
+        unset($this->biz['user']['id']);
         $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
         $this->getWorkflowService()->setRefunded($orderRefund['id']);
     }
