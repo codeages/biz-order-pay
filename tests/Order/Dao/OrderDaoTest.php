@@ -30,9 +30,10 @@ class OrderDaoTest extends IntegrationTestCase
                 'title' => 'order_item_name',
                 'sn' => 'order_item_sn',
                 'price_amount' => 0,
-                'price_type' => 'abc',
                 'pay_amount' => 0,
                 'user_id' => 1,
+                'target_id' => 1,
+                'target_type' => 'course',
             )
         );
 
