@@ -96,7 +96,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchAll(0) ?: array();
     }
 
-    public function searchWithItemConditions($conditions, $orderBys, $start, $limit)
+    public function queryWithItemConditions($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createItemQueryBuilder($conditions)
             ->setFirstResult($start)

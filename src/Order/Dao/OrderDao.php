@@ -20,7 +20,7 @@ interface OrderDao extends GeneralDaoInterface
 
     public function sumPaidAmount($conditions);
 
-    public function searchWithItemConditions($conditions, $orderBys, $start, $limit);
+    public function queryWithItemConditions($conditions, $orderBys, $start, $limit);
 
     public function countWithItemConditions($conditions);
 }

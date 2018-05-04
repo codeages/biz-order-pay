@@ -62,7 +62,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function searchOrders($conditions, $orderBy, $start, $limit)
     {
         if ($this->hasOrderItemConditions($conditions)) {
-            return $this->getOrderDao()->searchWithItemConditions($conditions, $orderBy, $start, $limit);
+            return $this->getOrderDao()->queryWithItemConditions($conditions, $orderBy, $start, $limit);
         }
 
         return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
