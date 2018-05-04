@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-
 use Codeages\Biz\Order\Dao\OrderDao;
 use Codeages\Biz\Order\Dao\OrderLogDao;
 use Codeages\Biz\Order\Service\OrderService;
@@ -182,7 +181,7 @@ class OrderServiceTest extends IntegrationTestCase
                     'functionName' => 'searchWithItemConditions',
                     'withParams' => array(
                         array('order_item_title' => 'item_title'),
-                        array('created_time', 'desc'),
+                        array('created_time' => 'desc'),
                         0,
                         10
                     ),
@@ -422,7 +421,7 @@ class OrderServiceTest extends IntegrationTestCase
 
         $newDeduct = $this->getOrderService()->addOrderItemDeduct($deduct);
         $newDeduct = $this->getOrderService()->updateOrderItemDeduct($newDeduct['id'], array('deduct_amount' => 10));
-        $this->assertEquals(10 , $newDeduct['deduct_amount']);
+        $this->assertEquals(10, $newDeduct['deduct_amount']);
 
         $order = $this->getOrderdao()->get($order['id']);
         $this->assertEquals(168, $order['pay_amount']);
@@ -540,5 +539,4 @@ class OrderServiceTest extends IntegrationTestCase
     {
         return $this->biz->dao('Order:OrderLogDao');
     }
-
 }
