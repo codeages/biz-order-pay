@@ -71,7 +71,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function countOrders($conditions)
     {
         if ($this->hasOrderItemConditions($conditions)) {
-            return $this->getOrderDao()->countWithItemConditions($conditions);
+            return $this->getOrderDao()->queryCountWithItemConditions($conditions);
         }
 
         return $this->getOrderDao()->count($conditions);

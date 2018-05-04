@@ -172,9 +172,9 @@ class OrderServiceTest extends IntegrationTestCase
         }
     }
 
-    public function testQueryWithItemConditions()
+    public function testSearchOrdersWithItemConditions()
     {
-        $mockedOrderService = $this->mockObjectIntoBiz(
+        $mockedOrderDao = $this->mockObjectIntoBiz(
             'Order:OrderDao',
             array(
                 array(
@@ -198,12 +198,12 @@ class OrderServiceTest extends IntegrationTestCase
         );
 
         $this->assertEquals('order-sn', $result['sn']);
-        $mockedOrderService->shouldHaveReceived('queryWithItemConditions');
+        $mockedOrderDao->shouldHaveReceived('queryWithItemConditions');
     }
 
-    public function testQueryOrdersWithoutItemConditions()
+    public function testSearchOrdersWithoutItemConditions()
     {
-        $mockedOrderService = $this->mockObjectIntoBiz(
+        $mockedOrderDao = $this->mockObjectIntoBiz(
             'Order:OrderDao',
             array(
                 array(
@@ -227,7 +227,53 @@ class OrderServiceTest extends IntegrationTestCase
         );
 
         $this->assertEquals('order-sn', $result['sn']);
-        $mockedOrderService->shouldHaveReceived('search');
+        $mockedOrderDao->shouldHaveReceived('search');
+    }
+
+    public function testCountOrdersWithItemConditions()
+    {
+        $mockedOrderDao = $this->mockObjectIntoBiz(
+            'Order:OrderDao',
+            array(
+                array(
+                    'functionName' => 'queryCountWithItemConditions',
+                    'withParams' => array(
+                        array('order_item_title' => 'item_title'),
+                    ),
+                    'returnValue' => 2,
+                ),
+            )
+        );
+
+        $result = $this->getOrderService()->countOrders(
+            array('order_item_title' => 'item_title')
+        );
+
+        $this->assertEquals(2, $result);
+        $mockedOrderDao->shouldHaveReceived('queryCountWithItemConditions');
+    }
+
+    public function testCountOrdersWithoutItemConditions()
+    {
+        $mockedOrderDao = $this->mockObjectIntoBiz(
+            'Order:OrderDao',
+            array(
+                array(
+                    'functionName' => 'countWithItemConditions',
+                    'withParams' => array(
+                        array('title_like' => 'order_title'),
+                    ),
+                    'returnValue' => 3,
+                ),
+            )
+        );
+
+        $result = $this->getOrderService()->searchOrders(
+            array('title_like' => 'order_title')
+        );
+
+        $this->assertEquals(3, $result);
+        $mockedOrderDao->shouldHaveReceived('count');
     }
 
     public function testSearchOrderItems()

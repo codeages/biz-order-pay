@@ -113,7 +113,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchAll();
     }
 
-    public function countWithItemConditions($conditions)
+    public function queryCountWithItemConditions($conditions)
     {
         $builder = $this->createItemQueryBuilder($conditions)
             ->select('COUNT(*)');

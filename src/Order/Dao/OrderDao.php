@@ -22,5 +22,5 @@ interface OrderDao extends GeneralDaoInterface
 
     public function queryWithItemConditions($conditions, $orderBys, $start, $limit);
 
-    public function countWithItemConditions($conditions);
+    public function queryCountWithItemConditions($conditions);
 }
