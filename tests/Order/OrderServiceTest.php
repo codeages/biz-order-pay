@@ -192,7 +192,7 @@ class OrderServiceTest extends IntegrationTestCase
 
         $result = $this->getOrderService()->search(
             array('order_item_title' => 'item_title'),
-            array('created_time', 'desc'),
+            array('created_time' => 'desc'),
             0,
             10
         );
