@@ -268,7 +268,7 @@ class OrderServiceTest extends IntegrationTestCase
             )
         );
 
-        $result = $this->getOrderService()->searchOrders(
+        $result = $this->getOrderService()->countOrders(
             array('title_like' => 'order_title')
         );
 
