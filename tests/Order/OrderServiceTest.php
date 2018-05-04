@@ -190,7 +190,7 @@ class OrderServiceTest extends IntegrationTestCase
             )
         );
 
-        $result = $this->getOrderService()->search(
+        $result = $this->getOrderService()->searchOrders(
             array('order_item_title' => 'item_title'),
             array('created_time' => 'DESC'),
             0,
@@ -219,7 +219,7 @@ class OrderServiceTest extends IntegrationTestCase
             )
         );
 
-        $result = $this->getOrderService()->search(
+        $result = $this->getOrderService()->searchOrders(
             array('title_like' => 'order_title'),
             array('created_time' => 'DESC'),
             0,
