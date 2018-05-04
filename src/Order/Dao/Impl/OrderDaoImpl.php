@@ -50,22 +50,6 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return (int) $builder->execute()->fetchColumn(0);
     }
 
-    public function search($conditions, $orderBys, $start, $limit)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        $declares = $this->declares();
-        foreach ($orderBys ?: array() as $order => $sort) {
-            $this->checkOrderBy($order, $sort, $declares['orderbys']);
-            $builder->addOrderBy($order, $sort);
-        }
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function sumPaidAmount($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
