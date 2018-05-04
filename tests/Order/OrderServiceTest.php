@@ -259,7 +259,7 @@ class OrderServiceTest extends IntegrationTestCase
             'Order:OrderDao',
             array(
                 array(
-                    'functionName' => 'countWithItemConditions',
+                    'functionName' => 'count',
                     'withParams' => array(
                         array('title_like' => 'order_title'),
                     ),
