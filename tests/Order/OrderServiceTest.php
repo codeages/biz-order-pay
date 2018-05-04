@@ -173,6 +173,35 @@ class OrderServiceTest extends IntegrationTestCase
         }
     }
 
+    public function testSearchOrdersWithItemConditions()
+    {
+        $mockedOrderService = $this->mockObjectIntoBiz(
+            array(
+                'Order:OrderDao',
+                array(
+                    'functionName' => 'searchWithItemConditions',
+                    'withParams' => array(
+                        array('order_item_title' => 'item_title'),
+                        array('created_time', 'desc'),
+                        0,
+                        10
+                    ),
+                    'returnValue' => array('sn' => 'order-sn'),
+                )
+            )
+        );
+
+        $result = $this->getOrderService()->search(
+            array('order_item_title' => 'item_title'),
+            array('created_time', 'desc'),
+            0,
+            10
+        );
+
+        $this->assertEquals('order-sn', $result['sn']);
+        $mockedOrderService->shouldHaveReceived('searchWithItemConditions');
+    }
+
     public function testSearchOrderItems()
     {
         $mockedOrderItems = $this->mockOrderItems();
