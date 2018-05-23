@@ -133,7 +133,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         return $log;
-
     }
 
     public function countOrderLogs($conditions)
