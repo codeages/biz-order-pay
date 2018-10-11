@@ -288,6 +288,11 @@ class PayServiceImpl extends BaseService implements PayService
         return $this->getPayTradeDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function countTrades($conditions)
+    {
+        return $this->getPayTradeDao()->count($conditions);
+    }
+
     protected function updateTradeToPaid($tradeId, $data)
     {
         $updatedFields = array(

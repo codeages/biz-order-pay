@@ -38,14 +38,14 @@ class PayTradeDaoImpl extends GeneralDaoImpl implements PayTradeDao
 
     public function findByTradeSns($sns)
     {
-        return $this->findInField('trade_sn', $sns);      
+        return $this->findInField('trade_sn', $sns);
     }
 
     public function getByPlatformSn($platformSn)
     {
         return $this->getByFields(array(
             'platform_sn' => $platformSn,
-        )); 
+        ));
     }
 
     public function declares()
@@ -57,8 +57,17 @@ class PayTradeDaoImpl extends GeneralDaoImpl implements PayTradeDao
                 'notify_data' => 'json',
                 'platform_created_params' => 'json'
             ),
+            'orderbys' => array(
+                'id',
+                'created_time',
+            ),
             'conditions' => array(
                 'order_sn IN (:order_sns)',
+                'order_sn NOT IN (:except_order_sns)',
+                'title LIKE :like_title',
+                'status = :status',
+                'type IN (:types)',
+                'cash_amount > :cash_amount_GE',
             ),
                 
         );

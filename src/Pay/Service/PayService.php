@@ -28,6 +28,8 @@ interface PayService
 
     public function searchTrades($conditions, $orderBy, $start, $limit);
 
+    public function countTrades($conditions);
+
     public function getCreateTradeResultByTradeSnFromPlatform($tradeSn);
 
     public function rechargeByIap($data);
