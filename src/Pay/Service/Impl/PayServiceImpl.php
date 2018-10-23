@@ -136,7 +136,7 @@ class PayServiceImpl extends BaseService implements PayService
         return $this->getPayTradeDao()->findByOrderSns($orderSns);
     }
 
-    public function updateTradeInvoiceSnById($id, $invoiceSn)
+    public function setTradeInvoiceSnById($id, $invoiceSn)
     {
         $trade = $this->getTradeById($id);
         if (empty($trade)) {

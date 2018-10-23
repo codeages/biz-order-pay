@@ -71,7 +71,6 @@ class PayTradeDaoImpl extends GeneralDaoImpl implements PayTradeDao
                 'platform_created_params' => 'json'
             ),
             'orderbys' => array(
-                'id',
                 'created_time',
             ),
             'conditions' => array(
@@ -84,12 +83,9 @@ class PayTradeDaoImpl extends GeneralDaoImpl implements PayTradeDao
                 'cash_amount > :cash_amount_GE',
                 'user_id = :user_id',
                 'invoice_sn = :invoice_sn',
-                'created_time > :created_time_GT',
                 'created_time >= :created_time_GTE',
-                'created_time < :created_time_LT',
                 'created_time <= :created_time_LTE',
             ),
-                
         );
     }
 }
