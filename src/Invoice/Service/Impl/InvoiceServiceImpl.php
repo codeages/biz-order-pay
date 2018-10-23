@@ -34,7 +34,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             $apply = $this->createInvoice($apply);
 
             foreach ($trades as $trade) {
-                $this->getPayTradeService()->updateTradeInvoiceSnById($trade['id'], $apply['sn']);
+                $this->getPayTradeService()->setTradeInvoiceSnById($trade['id'], $apply['sn']);
             }
 
             $this->biz['db']->commit();
