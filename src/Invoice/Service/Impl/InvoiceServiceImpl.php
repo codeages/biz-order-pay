@@ -28,9 +28,6 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         try {
             $this->biz['db']->beginTransaction();
 
-            $template = $this->getInvoiceTemplateService()->createInvoiceTemplate($apply);
-            $this->getInvoiceTemplateService()->setDefaultTemplate($template['id']);
-
             $apply = $this->createInvoice($apply);
 
             foreach ($trades as $trade) {
