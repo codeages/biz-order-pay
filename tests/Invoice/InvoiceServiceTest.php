@@ -26,7 +26,7 @@ class InvoiceServiceTest extends IntegrationTestCase
 
         $default = $this->getInvoiceTemplateService()->getDefaultTemplate($this->biz['user']['id']);
 
-        $this->assertNotNull($default);
+        $this->assertNull($default);
     }
 
     /**
