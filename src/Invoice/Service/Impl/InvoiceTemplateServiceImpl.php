@@ -101,10 +101,10 @@ class InvoiceTemplateServiceImpl extends BaseService implements InvoiceTemplateS
                 'comment',
                 'user_id',
                 'is_default',
-                'companyAddress',
+                'company_address',
                 'bank',
                 'account',
-                'companyMobile',
+                'company_mobile',
             )
         );
     }
