@@ -27,6 +27,8 @@ class BizInvoice extends Migration
               `review_user_id` int(11) DEFAULT 0 COMMENT '审核人Id',
               `bank` varchar(255) DEFAULT NULL COMMENT '开户行',
               `account` varchar(255) DEFAULT NULL COMMENT '开户行账号',
+              `company_address` varchar(255) DEFAULT NULL COMMENT '公司地址',
+              `company_mobile` varchar(20) DEFAULT NULL COMMENT '公司电话',
               `number` varchar(64) DEFAULT '' COMMENT '发票号',
               `post_name` VARCHAR(20) NULL DEFAULT NULL COMMENT '快递名称',
               `post_number` varchar(64) DEFAULT '' COMMENT '邮寄号',

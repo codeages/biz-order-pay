@@ -19,6 +19,8 @@ class BizInvoice extends Migration
               `comment` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
               `address` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
               `phone` varchar(255) NOT NULL DEFAULT '' COMMENT '联系电话',
+              `company_mobile` varchar(20) DEFAULT NULL COMMENT '公司电话',
+              `company_address` varchar(255) DEFAULT NULL COMMENT '公司地址',
               `email` varchar(255) NOT NULL DEFAULT '' COMMENT '电子邮箱',
               `receiver` varchar(100) NOT NULL DEFAULT '' COMMENT '收件人',
               `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',

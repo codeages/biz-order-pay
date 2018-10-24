@@ -94,7 +94,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
-        $apply = ArrayToolkit::parts($apply, array('title', 'type', 'taxpayer_identity', 'content', 'comment', 'address', 'email', 'phone', 'receiver', 'money', 'user_id', 'sn'));
+        $apply = ArrayToolkit::parts($apply, array('title', 'type', 'taxpayer_identity', 'content', 'comment', 'address', 'company_address', 'company_mobile', 'email', 'phone', 'receiver', 'money', 'user_id', 'sn', 'bank', 'account'));
 
         $apply = $this->getInvoiceDao()->create($apply);
 
@@ -126,7 +126,11 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'number' => '',
             'post_number' => '',
             'post_name' => '',
-            'refuse_comment' => ''
+            'refuse_comment' => '',
+            'company_address' => '',
+            'company_mobile' => '',
+            'bank' => '',
+            'account' => ','
         ));
 
         $invoice = $this->getInvoiceDao()->update($id, $fields);
