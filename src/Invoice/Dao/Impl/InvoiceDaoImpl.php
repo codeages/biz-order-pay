@@ -28,8 +28,8 @@ class InvoiceDaoImpl extends GeneralDaoImpl implements InvoiceDao
                 'status = :status',
                 'user_id IN ( :userIds)',
                 'sn = :sn',
+                'type = :type',
             ),
         );
-
     }
 }
