@@ -75,6 +75,31 @@ class IapGateway extends AbstractGateway
             return $this->requestReceiptData($notifyData);
         }
 
+        $setting = $this->getMobileSetting();
+        if (!empty($setting['bundleId'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['bundleId'])) {
+                return array(
+                    array(
+                        'msg' => '充值失败!',
+                    ),
+                    'failure',
+                );
+            }
+
+            $mobileIapProduct = $this->getMobileIapProduct();
+            $products = $data['receipt']['in_app'];
+            $amount = 0;
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    if (empty($mobileIapProduct[$product['product_id']]['price'])) {
+                        $this->getTargetlogService()->log(TargetlogService::INFO, 'iap_charge.error', '', '购买的商品id不存在', array($product));
+                    } else {
+                        $amount = $amount + $mobileIapProduct[$product['product_id']]['price'];
+                    }
+                }
+            }
+        }
+
         if (!isset($data['status']) || $data['status'] != 0) {
             return array(
                 array(
@@ -150,5 +175,20 @@ class IapGateway extends AbstractGateway
     public function converterRefundNotify($data)
     {
         throw new AccessDeniedException('can not convert refund notify with iap.');
+    }
+
+    protected function getMobileSetting()
+    {
+        return $this->biz['mobile.bundleId'];
+    }
+
+    protected function getMobileIapProduct()
+    {
+        return $this->biz['mobile.iap_product'];
+    }
+
+    protected function getTargetLogService()
+    {
+        return $this->biz->service('Targetlog:TargetlogService');
     }
 }
