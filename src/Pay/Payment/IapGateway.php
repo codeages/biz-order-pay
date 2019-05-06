@@ -5,6 +5,7 @@ namespace Codeages\Biz\Pay\Payment;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 
 class IapGateway extends AbstractGateway
 {
@@ -73,6 +74,31 @@ class IapGateway extends AbstractGateway
         if ($data['status'] == 21007) {
             $notifyData['is_sand_box'] = true;
             return $this->requestReceiptData($notifyData);
+        }
+
+        $iapOptions = $this->getIapOptions();
+        if (!empty($iapOptions['bundleId'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $iapOptions['bundleId'])) {
+                return array(
+                    array(
+                        'msg' => '充值失败!',
+                    ),
+                    'failure',
+                );
+            }
+
+            $mobileIapProduct = $iapOptions['product'];
+            $products = $data['receipt']['in_app'];
+            $amount = 0;
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    if (empty($mobileIapProduct[$product['product_id']]['price'])) {
+                        $this->getTargetlogService()->log(TargetlogService::INFO, 'iap_charge.error', '', '购买的商品id不存在', array($product));
+                    } else {
+                        $amount = $amount + $mobileIapProduct[$product['product_id']]['price'];
+                    }
+                }
+            }
         }
 
         if (!isset($data['status']) || $data['status'] != 0) {
@@ -150,5 +176,15 @@ class IapGateway extends AbstractGateway
     public function converterRefundNotify($data)
     {
         throw new AccessDeniedException('can not convert refund notify with iap.');
+    }
+
+    protected function getIapOptions()
+    {
+        return $this->biz['iap.options'];
+    }
+
+    protected function getTargetLogService()
+    {
+        return $this->biz->service('Targetlog:TargetlogService');
     }
 }
