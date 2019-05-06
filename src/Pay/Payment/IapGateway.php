@@ -77,7 +77,7 @@ class IapGateway extends AbstractGateway
 
         $iapOptions = $this->getIapOptions();
         if (!empty($iapOptions['bundleId'])) {
-            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['bundleId'])) {
+            if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $iapOptions['bundleId'])) {
                 return array(
                     array(
                         'msg' => '充值失败!',
