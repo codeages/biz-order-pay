@@ -75,8 +75,8 @@ class IapGateway extends AbstractGateway
             return $this->requestReceiptData($notifyData);
         }
 
-        $setting = $this->getMobileSetting();
-        if (!empty($setting['bundleId'])) {
+        $iapOptions = $this->getIapOptions();
+        if (!empty($iapOptions['bundleId'])) {
             if (!empty($data['receipt']['bundle_id']) && ($data['receipt']['bundle_id'] != $setting['bundleId'])) {
                 return array(
                     array(
@@ -86,7 +86,7 @@ class IapGateway extends AbstractGateway
                 );
             }
 
-            $mobileIapProduct = $this->getMobileIapProduct();
+            $mobileIapProduct = $iapOptions['product'];
             $products = $data['receipt']['in_app'];
             $amount = 0;
             if (!empty($products)) {
@@ -177,14 +177,9 @@ class IapGateway extends AbstractGateway
         throw new AccessDeniedException('can not convert refund notify with iap.');
     }
 
-    protected function getMobileSetting()
+    protected function getIapOptions()
     {
-        return $this->biz['mobile.bundleId'];
-    }
-
-    protected function getMobileIapProduct()
-    {
-        return $this->biz['mobile.iap_product'];
+        return $this->biz['iap.options'];
     }
 
     protected function getTargetLogService()
