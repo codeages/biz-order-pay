@@ -238,7 +238,7 @@ class PayServiceImpl extends BaseService implements PayService
             'trade_sn' => $trade['trade_sn'],
             'status' => 'paid',
             'pay_amount' => $data['pay_amount'],
-            'receipt' => $data['receipt'],
+            'receipt' => $data['attach'],
         );
         $this->updateTradeToPaidAndTransferAmount($data);
         $trade = $this->getPayTradeDao()->get($trade['id']);
