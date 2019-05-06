@@ -5,6 +5,7 @@ namespace Codeages\Biz\Pay\Payment;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 
 class IapGateway extends AbstractGateway
 {
