@@ -405,7 +405,7 @@ class AccountServiceImpl extends BaseService implements AccountService
 
     public function searchCashflows($conditions, $orderBy, $start, $limit, $columns = array())
     {
-        return $this->getCashflowDao()->search($conditions, $orderBy, $start, $columns);
+        return $this->getCashflowDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function countCashflows($conditions)
