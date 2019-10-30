@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-
 use Codeages\Biz\Order\Dao\OrderDao;
 use Codeages\Biz\Order\Dao\OrderLogDao;
 use Codeages\Biz\Order\Service\OrderService;
@@ -171,6 +170,110 @@ class OrderServiceTest extends IntegrationTestCase
             $this->assertEquals('closed', $orderItem['status']);
             $this->assertNotEmpty($orderItem['close_time']);
         }
+    }
+
+    public function testSearchOrdersWithItemConditions()
+    {
+        $mockedOrderDao = $this->mockObjectIntoBiz(
+            'Order:OrderDao',
+            array(
+                array(
+                    'functionName' => 'queryWithItemConditions',
+                    'withParams' => array(
+                        array('order_item_title' => 'item_title'),
+                        array('created_time' => 'DESC'),
+                        0,
+                        10
+                    ),
+                    'returnValue' => array('sn' => 'order-sn'),
+                ),
+            )
+        );
+
+        $result = $this->getOrderService()->searchOrders(
+            array('order_item_title' => 'item_title'),
+            array('created_time' => 'DESC'),
+            0,
+            10
+        );
+
+        $this->assertEquals('order-sn', $result['sn']);
+        $mockedOrderDao->shouldHaveReceived('queryWithItemConditions');
+    }
+
+    public function testSearchOrdersWithoutItemConditions()
+    {
+        $mockedOrderDao = $this->mockObjectIntoBiz(
+            'Order:OrderDao',
+            array(
+                array(
+                    'functionName' => 'search',
+                    'withParams' => array(
+                        array('title_like' => 'order_title'),
+                        array('created_time' => 'DESC'),
+                        0,
+                        10
+                    ),
+                    'returnValue' => array('sn' => 'order-sn'),
+                ),
+            )
+        );
+
+        $result = $this->getOrderService()->searchOrders(
+            array('title_like' => 'order_title'),
+            array('created_time' => 'DESC'),
+            0,
+            10
+        );
+
+        $this->assertEquals('order-sn', $result['sn']);
+        $mockedOrderDao->shouldHaveReceived('search');
+    }
+
+    public function testCountOrdersWithItemConditions()
+    {
+        $mockedOrderDao = $this->mockObjectIntoBiz(
+            'Order:OrderDao',
+            array(
+                array(
+                    'functionName' => 'queryCountWithItemConditions',
+                    'withParams' => array(
+                        array('order_item_title' => 'item_title'),
+                    ),
+                    'returnValue' => 2,
+                ),
+            )
+        );
+
+        $result = $this->getOrderService()->countOrders(
+            array('order_item_title' => 'item_title')
+        );
+
+        $this->assertEquals(2, $result);
+        $mockedOrderDao->shouldHaveReceived('queryCountWithItemConditions');
+    }
+
+    public function testCountOrdersWithoutItemConditions()
+    {
+        $mockedOrderDao = $this->mockObjectIntoBiz(
+            'Order:OrderDao',
+            array(
+                array(
+                    'functionName' => 'count',
+                    'withParams' => array(
+                        array('title_like' => 'order_title'),
+                    ),
+                    'returnValue' => 3,
+                ),
+            )
+        );
+
+        $result = $this->getOrderService()->countOrders(
+            array('title_like' => 'order_title')
+        );
+
+        $this->assertEquals(3, $result);
+        $mockedOrderDao->shouldHaveReceived('count');
     }
 
     public function testSearchOrderItems()
@@ -393,7 +496,7 @@ class OrderServiceTest extends IntegrationTestCase
 
         $newDeduct = $this->getOrderService()->addOrderItemDeduct($deduct);
         $newDeduct = $this->getOrderService()->updateOrderItemDeduct($newDeduct['id'], array('deduct_amount' => 10));
-        $this->assertEquals(10 , $newDeduct['deduct_amount']);
+        $this->assertEquals(10, $newDeduct['deduct_amount']);
 
         $order = $this->getOrderdao()->get($order['id']);
         $this->assertEquals(168, $order['pay_amount']);
@@ -511,5 +614,4 @@ class OrderServiceTest extends IntegrationTestCase
     {
         return $this->biz->dao('Order:OrderLogDao');
     }
-
 }
