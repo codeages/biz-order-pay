@@ -146,7 +146,7 @@ class PayServiceImpl extends BaseService implements PayService
         if (!empty($trade['invoice_sn'])) {
             $invoice = $this->getInvoiceService()->getInvoiceBySn($trade['invoice_sn']);
             if ('refused' != $invoice['status']) {
-                throw new NotFoundException('trade had invoice');
+                throw new AccessDeniedException('trade had invoice');
             }
         }
 
