@@ -74,7 +74,8 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
         $builder = $this->createQueryBuilder($conditions)
             ->select("sum({$column}) as count ,from_unixtime({$dateColumn},'%Y-%m-%d') date")
-            ->groupBy("date {$sort}");
+            ->groupBy("date")
+            ->orderBy('date', $sort);
 
         return $builder->execute()->fetchAll(0) ?: array();
     }
