@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "codeages/biz-framework": "^0.9|^0.10|^0.11",
-        "codeages/omnipay-alipay": "dev-master",
+        "codeages/omnipay-alipay": "^2.4.0",
         "lokielse/omnipay-wechatpay": "^3.0"
     },
     "license": "MIT",
